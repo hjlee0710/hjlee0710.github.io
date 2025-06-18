@@ -225,7 +225,7 @@ jekyll-archives:
     tag: /tags/:name/
     category: /categories/:name/
 
-
+# Error : could not fetch the config 팝업메세지 해결
 jekyll_admin:
    hidden_links:
    homepage: ""

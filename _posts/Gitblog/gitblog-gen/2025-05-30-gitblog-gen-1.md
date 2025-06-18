@@ -1,5 +1,8 @@
 ---
 title: "[Gitblog] Jekyll 기반  Chirpy 테마 Gitblog 생성 - ① 환경설정"
+categories:
+- Gitblog
+- Jekyll기반  Chirpy 테마 Gitblog 생성
 ---
 
 ## **Gitblog란?**
@@ -25,43 +28,27 @@ title: "[Gitblog] Jekyll 기반  Chirpy 테마 Gitblog 생성 - ① 환경설정
 
 ## **Gitblog 환경설정**
 ---
-- 개발환경 : `Ubuntu 20.04` 또는 `Mac`
+이 포스트는 `Ubuntu 20.04` 환경 또는 `Mac` 환경을 기준으로 작성했습니다.
 
 #### **Ruby 설치**
 ---
-> 루비는 간결함과 생산성을 강조한 동적인 오픈 소스 프로그래밍 언어입니다. 루비의 우아한 문법으로 자연스럽게 읽히고 쓰기 편한 프로그램을 만들 수 있습니다.
+> **루비는 간결함과 생산성을 강조한 동적인 오픈 소스 프로그래밍 언어입니다. 루비의 우아한 문법으로 자연스럽게 읽히고 쓰기 편한 프로그램을 만들 수 있습니다.**<br>
 > _(Ruby 공식 홈페이지)_
 
 `Ruby`는 언어의 문법이 쉽고 확장이 편리해서 잘 디자인된 라이브러리를 이용하면 프로그래밍을 처음 시작한 사람도 복잡한 작업을 상대적으로 쉽게 사용할 수 있다고 합니다. <br>
-[How to Install Ruby on Ubuntu](https://phoenixnap.com/kb/install-ruby-ubuntu) 포스트를 참고하여 작성했습니다.
-##### **(❌ 비추천) 패키지 레파지토리로 Ruby 설치**
----
-우리가 많이 사용하는 패키지 레파지토리로 `Ruby`를 설치하는 과정입니다. 하지만, 이 방식은 최신 버전의 `Ruby`를 사용할 수 없기 때문에 비추천하는 바입니다.
-
-`Note : Mac에서는 apt 대신 brew를 사용하시면 됩니다.`
-
-1. 패키지 레파지토리 정보를 업데이트 합니다.
-```bash
-sudo apt update
-```
-2. 레파지토리 상에서 `Ruby`를 설치합니다.
-```bash
-sudo apt install ruby-full -y
-```
-3. 제대로 설치가 되었는지 `Ruby` 버전을 확인합니다.
-```bash
-ruby -v
-```
+>아래의 내용들은 [How to Install Ruby on Ubuntu](https://phoenixnap.com/kb/install-ruby-ubuntu) 포스트를 참고하여 작성했습니다.
+{: .prompt-info}
 
 ##### **Rbenv을 활용한 Ruby 설치**
 ---
->Rbenv는 Ruby의 버전을 독립적으로 사용할 수 있도록 도와주는 패키지 입니다.
+>**Rbenv는 Ruby의 버전을 독립적으로 사용할 수 있도록 도와주는 패키지 입니다.**
 
 `Rbenv`이 없으면 최신 버전의 `Ruby`를 사용하기 어렵습니다.
 
-`Note : Mac에서는 apt 대신 brew를 사용하시면 됩니다.`
+>`Mac`에서는 `apt` 대신 `brew`를 사용하시면 됩니다.
+{: .prompt-info }
 
-1. 패키지 레파지토리 정보를 업데이트 합니다.
+1. 패키지 `Repository` 정보를 업데이트 합니다.
 ```bash
 sudo apt update
 ```
@@ -75,7 +62,8 @@ sudo apt install git curl autoconf bison build-essential libssl-dev libyaml-dev 
 	```bash
 	curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
 	```
-	- `Mac`에서는 brew를 사용합니다.(`Mac`에서는 기본적으로 `Ruby` 2.6 버전이 설치되어 있지만, 최신 버전이 아니라서 여러 기능이 제한됩니다.)
+	- `Mac`에서는 brew를 사용합니다.<br>
+			(`Mac`에서는 기본적으로 `Ruby` 2.6 버전이 설치되어 있지만, 최신 버전이 아니라서 여러 기능이 제한됩니다.)
 	```bash
 	brew install rbenv ruby-build
 	```
@@ -101,8 +89,9 @@ rbenv -v
 ```bash
 rbenv install -l
 ```
-![1](/assets/img/2025-05-30-gitblog-gen-1/1.png)
-7. 설치 가능한 `Ruby` 버전 중 필요한 버전을 설치하도록 합니다. 저 같은 경우는 위에 그림에서 알 수 있듯이 3.4.4 버전이 가장 최신 버전이네요.
+![1](/assets/img/2025-05-30-gitblog-gen-1/1.png){: .shadow .rounded-10}
+7. 설치 가능한 `Ruby` 버전 중 필요한 버전을 설치하도록 합니다. 저 같은 경우는 위에 그림
+8. 에서 알 수 있듯이 3.4.4 버전이 가장 최신 버전이네요.
 ```bash
 rbenv install 3.4.4 //3.4.4 대신에 선호하시는 버전으로 수정하셔도 됩니다.
 ```
@@ -114,12 +103,42 @@ rbenv global 3.4.4 //7번에서 어떤 버전을 선택했는가에 따라 다�
 ```bash
 ruby -v
 ```
-![2](/assets/img/2025-05-30-gitblog-gen-1/2.png)
+![2](/assets/img/2025-05-30-gitblog-gen-1/2.png){: .shadow .rounded-10}
+
+
+##### **(Optional) 패키지 Repository로 Ruby 설치(❌ 비추천)**
+---
+>패키지 `Repository`로 `Ruby`를 설치하는 방법은 최신 버전의 `Ruby`를 사용할 수 없기 때문에 비추천하는 바입니다.
+{: .prompt-warning}
+
+<details>
+<summary>그래도 알고 싶다면 Click!!</summary>
+<div markdown="1">
+			
+>`Mac`에서는 `apt` 대신 `brew`를 사용하시면 됩니다.
+{: .prompt-info }
+
+1. 패키지 `Repository` 정보를 업데이트 합니다.
+```bash
+sudo apt update
+```
+2. `Repository` 상에서 `Ruby`를 설치합니다.
+```bash
+sudo apt install ruby-full -y
+```
+3. 제대로 설치가 되었는지 `Ruby` 버전을 확인합니다.
+```bash
+ruby -v
+```
+		
+</div>
+</details>
 
 #### **Node.js 설치**
 ---
 `Node.js`는 `JavaScript` 코드를 브라우저 밖에서 실행할 수 있게 해주는 런타임 환경입니다. `Jekyll`과 같은 정적 웹사이트 생성기를 사용하기 위해서는 설치가 필수입니다.<br>
-[Linux/Ubuntu Node js 노드 설치, 최신 버전 설치하기](https://seokbong.tistory.com/273) 포스트를 참고하여 작성했습니다.
+>아래의 내용들은 [Linux/Ubuntu Node js 노드 설치, 최신 버전 설치하기](https://seokbong.tistory.com/273) 포스트를 참고하여 작성했습니다.
+{: .prompt-info}
 
 1. (✅ `Ubuntu`, `Mac` 구분) `Node.js`와 `NPM(Node Package Manager)`을 설치해줍니다.
 	- `Ubuntu`에서는 아래와 같이 설치합니다.
@@ -154,6 +173,7 @@ gem install jekyll
 ```bash
 gem install github-pages
 ```
+
 ## **마치며**
 ---
 위의 설치 과정들을 통해서 `Jekyll` 기반의 `Gitblog`를 제작할 수 있는 환경이 설정되었습니다. 어떤 개발을 하든 개발 환경을 구축하는 건 꽤 시간이 걸립니다. 이 포스트가 도움이 되면 좋겠습니다.<br>
