@@ -94,7 +94,7 @@ bundle exec jekyll serve
 
 1. 업로드 하기 전에 먼저, `_config.yml`를 수정해야합니다.
 ![4](/assets/img/2025-06-16-gitblog-gen-2/4.png){: .shadow .rounded-10}
-위의 사진은 `_config.yml` 내용의 일부입니다. 다양한 설정값이 있지만 일단은 배포가 목적이기 때문에 `url`설정만 바꿔주도록 하겠습니다. 나머지 설정은 [다음 포스트](../gitblog-mod-1)에서 다루도록 하겠습니다. `<username>` 대신에 자신의 `GitHub username`을 입력해주세요.
+위의 사진은 `_config.yml` 내용의 일부입니다. 다양한 설정값이 있지만 일단은 배포가 목적이기 때문에 `url`설정만 바꿔주도록 하겠습니다. 나머지 설정은 다음 포스트에서 다루도록 하겠습니다. `<username>` 대신에 자신의 `GitHub username`을 입력해주세요.
 ```yaml
 url: "https://<username>.github.io"
 ```
