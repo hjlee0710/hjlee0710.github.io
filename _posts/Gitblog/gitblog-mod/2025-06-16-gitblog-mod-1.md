@@ -15,6 +15,9 @@ categories:
 > 버전마다 `_config.yml`의 구성이 다를 수 있습니다. 저는 `7.3.0` 버전에서 수정했습니다.
 {: .prompt-warning}
 
+> 아래의 내용들은 [jekyll-seo-tag](https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md)의 내용을 기반으로 작성했습니다.
+{: .prompt-info}
+
 - theme
 : 지금 적용하고 있는 테마 이름입니다. 우리는 `jekyll-theme-chirpy`을 사용하고 있기 때문에 수정할 필요가 없습니다.
 - lang
@@ -30,3 +33,6 @@ categories:
 	![1](/assets/img/2025-06-16-gitblog-mod-1/1.png){: .shadow .rounded-10}
 	- description
 	: `meta` 태그용 긴 설명입니다. 이 설명은 블로그를 검색했을때, 아래의 그림처럼 블로그에 대한 설명으로 나타나게 됩니다.
+	- url
+	: 배포하는 블로그의 전체 url입니다. 일반적으로 `https://<username>.github.io`로 설정을 합니다.
+	- git
