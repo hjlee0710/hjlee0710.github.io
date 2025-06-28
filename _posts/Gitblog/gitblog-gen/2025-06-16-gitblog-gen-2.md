@@ -1,5 +1,5 @@
 ---
-title: "[Gitblog] Jekyll 기반 Chirpy 테마 Gitblog 생성 -  ② Chirpy 테마 설정"
+title: "[Gitblog] Jekyll 기반 Chirpy 테마 Gitblog 생성 -  ② Chirpy 테마 적용 및 배포"
 categories:
 - Gitblog
 - Jekyll기반  Chirpy 테마 Gitblog 생성
@@ -17,7 +17,7 @@ categories:
 앞선 포스트에서 다룬 [`Gitblog`의 단점](../gitblog-gen-1/#gitblog-단점)에서 언급한 대로 `Jekyll`을 활용하여 블로그를 처음부터 끝까지 만들려면 고도의 프론트앤드 개발능력이 필요로 합니다. 하지만 `Chirpy 테마`와 같이 제작된 테마를 쓰면 처음부터 코드를 작성하지 않고, 딱 필요한 부분만 수정하면 되므로 요구되는 프론트앤드 개발능력이 크게 낮아집니다.
 
 
-## **Chirpy 테마 설정**
+## **Chirpy 테마 적용 및 배포**
 `Chirpy 테마`를 적용시킨 개인 블로그를 배포하기 위해서는 아래의 작업을 순서대로 진행하면 됩니다.
 1. [Chirpy 테마 Fork 하기](#chirpy-테마-fork-하기)
 2. [Repository를 Local에서 수정할 수 있도록 설정](#repository를-local에서-수정할-수-있도록-설정)
@@ -40,15 +40,15 @@ categories:
 이제부터 아래의 순서대로 `Fork`해보겠습니다.
 
 1. `GitHub`에 로그인하기
-2. [Repository를 Fork하고](https://github.com/cotes2020/jekyll-theme-chirpy/fork) 붉은 박스 안의 내용 수정하기
+2. [`Repository`를 `Fork`하고](https://github.com/cotes2020/jekyll-theme-chirpy/fork) 붉은 박스 안의 내용 수정하기
 ![1](/assets/img/2025-06-16-gitblog-gen-2/1.png){: .shadow .rounded-10}
   - Owner
   : 자신이 생성하고자 하는 `Owner`를 골라주세요.
   - Repository name
   : `jekyll-theme-chirpy`대신에 `<username>.github.io`를 입력해야 합니다. 이때, `<username>`대신에 자신의 `GitHub username`을 소문자로 입력해주셔야 합니다. 왠만하면 `Owner`과 동일합니다.
-3. [`GitHub Actions`](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow)를 사용하여 `Repository`를 배포할 수 있도록 설정합니다.
+3. [`GitHub Actions`](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow)를 사용하여 `Repository`를 배포할 수 있도록 설정합니다. 아래의 그림에서처럼 붉은 박스를 따라 **Settings > Pages > Build and deployment > Source > GitHub Actions**와 같이 설정해줍니다.
 ![2](/assets/img/2025-06-16-gitblog-gen-2/2.png){: .shadow .rounded-10}
-위의 그림에서처럼 붉은 박스를 따라 **Settings > Pages > Build and deployment > Source > GitHub Actions**와 같이 설정해줍니다.
+
 
 >`GitHub` Free 플랜을 사용하신다면 `Repository`는 공개(public) 상태여야 합니다.
 {: .prompt-info}
@@ -92,7 +92,7 @@ bundle exec jekyll serve
 
 지금까지는 `Local` 환경 `Repository`에서만 수정하고 제대로 작동하는지 확인했습니다. 이제는 수정한 `Local` 환경 `Repository`를 `Remote` 환경에 업로드해서 온라인에서 제 블로그에 접근할 수 있는지 확인해보도록 하겠습니다.
 
-1. 업로드 하기 전에 먼저, `_config.yml`를 수정해야합니다.
+1. 업로드 하기 전에 먼저, `_config.yml`를 수정해야합니다. `_config.yml`는 `<username>.github.io` 디렉토리에 바로 위치하고 있기 때문에 찾기 쉽습니다.
 ![4](/assets/img/2025-06-16-gitblog-gen-2/4.png){: .shadow .rounded-10}
 위의 사진은 `_config.yml` 내용의 일부입니다. 다양한 설정값이 있지만 일단은 배포가 목적이기 때문에 `url`설정만 바꿔주도록 하겠습니다. 나머지 설정은 다음 포스트에서 다루도록 하겠습니다. `<username>` 대신에 자신의 `GitHub username`을 입력해주세요.
 ```yaml
@@ -106,11 +106,18 @@ git commit -m "Generate my Gitblog."
 git push origin master
 ```
 
-3. 업로드를 하면 아래의 화면과 같이 `GitHub`에서 검토가 진행됩니다.
+3. 업로드를 하면 아래의 화면과 같이 `GitHub`에서 붉은 박스로 표시한 것 처럼 검토가 진행됩니다.
+![5_1](/assets/img/2025-06-16-gitblog-gen-2/5_1.png){: .shadow .rounded-10}
+업로드가 성공한다면 붉은 박스로 표시한 것 처럼 `Sucess`를 확인할 수 있어요.
+![5_2](/assets/img/2025-06-16-gitblog-gen-2/5_2.png){: .shadow .rounded-10}
 
-4. 마지막으로 `https://<username>.github.io`를 주소창에 입력하여, 배포가 되었는지 확인합니다.
+4. 마지막으로 `https://<username>.github.io`를 주소창에 입력하여, 배포가 되었는지 확인합니다.<br>
+(`Sucess`를 확인해도 `Update`를 하는데는 3분 정도 기다려야 합니다.)
 ![6](/assets/img/2025-06-16-gitblog-gen-2/6.png){: .shadow .rounded-10}
 
+> 앗! `Fail`이 떴네요. 하지만 너무 걱정하지 마세요. 이유를 자세하게 설명해주거든요. 아래의 그림에서는 잘못된 링크를 걸어서 문제가 발생했네요.
+> ![5_3](/assets/img/2025-06-16-gitblog-gen-2/5_3.png){: .shadow .rounded-10}
+{: .prompt-tip}
 ## **마치며**
 ---
-이번 포스트에서는 `Chirpy 테마`를 `Fork`해서 개인 블로그로 배포까지 했습니다. 다음 포스트에는 앞서 말씀드렸듯이 `url` 이외에 다른 설정값을 확인해보도록 하겠습니다. 추가적으로 `Gitblog`에 포스트 작업을 좀 더 편하게 할 수 있는 팁을 알려드리도록 하겠습니다.
+이번 포스트에서는 `Chirpy 테마`를 `Fork`해서 개인 블로그로 배포까지 했습니다. 다음 포스트에는 앞서 말씀드렸듯이 `url` 이외에 다른 설정값을 확인해보도록 하겠습니다.
