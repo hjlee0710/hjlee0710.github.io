@@ -19,6 +19,7 @@ title: 악필러의 정리노트 # the main title
 tagline: AI, Computer Vision, ROS 등등 정리  # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
+  A minimal, responsive and feature-rich Jekyll theme for technical writing.
 # 다양한 지식을 정리하는 블로그입니다.
 # 주요 연구 분야는 AI, Computer Vision, ROS입니다. 
 # AI 분야를 정리할 때는 코드를 하나씩 뜯어보면서 모델 구조를 기초부터 차근차근 살펴볼 것입니다.
