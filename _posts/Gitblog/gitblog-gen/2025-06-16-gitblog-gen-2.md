@@ -94,7 +94,7 @@ bundle exec jekyll serve
 
 1. 업로드 하기 전에 먼저, `_config.yml`를 수정해야합니다. `_config.yml`는 `<username>.github.io` 디렉토리에 바로 위치하고 있기 때문에 찾기 쉽습니다.
 ![4](/assets/img/2025-06-16-gitblog-gen-2/4.png){: .shadow .rounded-10}
-위의 사진은 `_config.yml` 내용의 일부입니다. 다양한 설정값이 있지만 일단은 배포가 목적이기 때문에 `url`설정만 바꿔주도록 하겠습니다. 나머지 설정은 다음 포스트에서 다루도록 하겠습니다. `<username>` 대신에 자신의 `GitHub username`을 입력해주세요.
+위의 사진은 `_config.yml` 내용의 일부입니다. 다양한 설정값이 있지만 일단은 배포가 목적이기 때문에 `url`설정만 바꿔주도록 하겠습니다. 나머지 설정은 [차후](../gitblog-mod/2025-06-16-gitblog-mod-1.md)에 다루도록 하겠습니다. `<username>` 대신에 자신의 `GitHub username`을 입력해주세요.
 ```yaml
 url: "https://<username>.github.io"
 ```
@@ -120,4 +120,4 @@ git push origin master
 {: .prompt-tip}
 ## **마치며**
 ---
-이번 포스트에서는 `Chirpy 테마`를 `Fork`해서 개인 블로그로 배포까지 했습니다. 다음 포스트에는 앞서 말씀드렸듯이 `url` 이외에 다른 설정값을 확인해보도록 하겠습니다.
+이번 포스트에서는 `Chirpy 테마`를 `Fork`해서 개인 블로그로 배포까지 했습니다. 하지만 배포만 하게 되면 오직 자신만의 블로그가 되어 버립니다. 다른 사람들과 블로그를 공유하려면 `Google`, `Naver` 등과 같은 검색 엔진에 노출시켜야 하는데요. 다음 포스트에 이에 관한 내용을 다뤄보도록 하겠습니다.

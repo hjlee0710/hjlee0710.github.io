@@ -35,4 +35,5 @@ categories:
 	: `meta` 태그용 긴 설명입니다. 이 설명은 블로그를 검색했을때, 아래의 그림처럼 블로그에 대한 설명으로 나타나게 됩니다.
 	- url
 	: 배포하는 블로그의 전체 url입니다. 일반적으로 `https://<username>.github.io`로 설정을 합니다.
-	- git
+	- github
+	: 이 내용은
