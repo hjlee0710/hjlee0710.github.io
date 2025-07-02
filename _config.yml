@@ -19,13 +19,12 @@ title: 악필러의 정리노트 # the main title
 tagline: AI, Computer Vision, ROS 등등 정리  # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
-  A minimal, responsive and feature-rich Jekyll theme for technical writing.
-# 다양한 지식을 정리하는 블로그입니다.
-# 주요 연구 분야는 AI, Computer Vision, ROS입니다. 
-# AI 분야를 정리할 때는 코드를 하나씩 뜯어보면서 모델 구조를 기초부터 차근차근 살펴볼 것입니다.
-# Computer Vision 분야를 정리할 때는 오래된 분야인 만큼 이론이 중요하기 때문에 관련 이론을 근거있게 정리할 것입니다.
-# ROS 분야를 정리할 때는 LiDAR, Camera 센서 작동 위주로 작성할 예정입니다.
-# 주요 연구 분야 이외에도 취업, 게임 등 다양한 지식을 정리할 예정입니다.
+  다양한 지식을 정리하는 블로그입니다.
+  주요 연구 분야는 AI, Computer Vision, ROS입니다. 
+  AI 분야를 정리할 때는 코드를 하나씩 뜯어보면서 모델 구조를 기초부터 차근차근 살펴볼 것입니다.
+  Computer Vision 분야를 정리할 때는 오래된 분야인 만큼 이론이 중요하기 때문에 관련 이론을 근거있게 정리할 것입니다.
+  ROS 분야를 정리할 때는 LiDAR, Camera 센서 작동 위주로 작성할 예정입니다.
+  주요 연구 분야 이외에도 취업, 게임 등 다양한 지식을 정리할 예정입니다.
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
@@ -52,7 +51,7 @@ social:
 
 # Site Verification Settings
 webmaster_verifications:
-  google: 
+  google: y10OeNkU3Qxv-vxXySdAl0VxChglLbLryhIBeU2MwiE
   bing: # fill in your Bing verification code
   alexa: # fill in your Alexa verification code
   yandex: # fill in your Yandex verification code
