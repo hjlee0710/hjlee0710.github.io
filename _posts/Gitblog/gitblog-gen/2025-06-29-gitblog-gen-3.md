@@ -31,23 +31,23 @@ categories:
 > [sitemaps.org](https://www.sitemaps.org/ko/index.html)를 참고하여 작성했습니다.
 {: .prompt-info }
 
-> **Sitemap은 웹마스터가 크롤링에 사용할 수 있는 사이트의 페이지에 대한 정보를 검색 엔진에 알리는 손쉬운 방법입니다.**
+> **Sitemap은 웹마스터가 크롤링에 사용할 수 있는 사이트의 페이지에 대한 정보를 검색 엔진에 알리는 손쉬운 방법입니다.**<br>
 > _( sitemaps.org 설명글)_
 
-`sitemap.xml`은 검색 엔진에서 사이트를 보다 지능적으로 크롤링할 수 있도록 각 URL에 대한 추가 메타데이터(마지막 업데이트된 날짜, 변경 빈도, 사이트의 다른 URL에 상대적인 중요도)와 함께 사이트에 대한 `URL`을 나열하는 `XML` 파일입니다. 
+`sitemap.xml`은 검색 엔진에서 사이트를 보다 지능적으로 크롤링할 수 있도록 각 `URL`에 대한 추가 메타데이터(마지막 업데이트된 날짜, 변경 빈도 등)와 함께 사이트에 대한 `URL`을 나열하는 `XML` 파일입니다. 
 
 >**즉, 추가 메타데이터를 통해 Google이 내 사이트의 구조를 더 잘 이해하고, 새 콘텐츠를 더 빠르게 발견하도록 도와주는 것입니다.**
 
-`Google Search Console` 등록만으로 크롤링 주기가 자동으로 줄지는 않지만, `sitemap.xml`을 제출하면 Google이 새 글이나 변경사항을 빠르게 감지할 수 있기 때문에 크롤링과 색인 속도는 간접적으로 향상될 수 있습니다.
+`Google Search Console` 등록만으로 크롤링 주기가 자동으로 줄지는 않지만, `sitemap.xml`을 제출하면 `Google`이 새 글이나 변경사항을 빠르게 감지할 수 있기 때문에 크롤링과 색인 속도는 간접적으로 향상될 수 있습니다.
 
 #### **robots.txt란?**
 > [robots.txt](https://developers.google.com/search/docs/crawling-indexing/robots/intro?hl=ko)를 참고하여 작성했습니다.
 {: .prompt-info }
 
-> **robots.txt 파일은 크롤러가 사이트에서 액세스할 수 있는 URL을 검색엔진 크롤러에 알려 줍니다.**
+> **robots.txt 파일은 크롤러가 사이트에서 액세스할 수 있는 URL을 검색엔진 크롤러에 알려 줍니다.**<br>
 > _(Google 검색 센터 Robots.txt 소개)_
 
-`robots.txt` 파일은 크롤러에게 사이트에 접근할 수 있는 범위를 정해줌으로서 사이트의 크롤러 트래픽을 관리할 수 있습니다. 또한, 크롤러가 몇몇 파일에 접근할 수 없도록 지정할 수 있습니다.  우리는 이 robots.txt 파일에 sitemap.xml의 위치를 명시하여, 크롤러가 사이트 구조를 보다 쉽게 파악하고 URL 리스트에 접근할 수 있도록 도와줄 것이고 접근을 제한하고 싶은 경로들을 지정할 것입니다.
+`robots.txt` 파일은 크롤러에게 사이트에 접근할 수 있는 범위를 정해줌으로서 사이트의 크롤러 트래픽을 관리할 수 있습니다. 또한, 크롤러가 몇몇 파일에 접근할 수 없도록 지정할 수 있습니다.  우리는 이 `robots.txt` 파일에 `sitemap.xml`의 위치를 명시하여, 크롤러가 사이트 구조를 보다 쉽게 파악하고 `URL` 리스트에 접근할 수 있도록 도와줄 것입니다.
 
 ## **Google 검색 엔진에 노출시키기**
 #### **sitemap.xml 생성**
@@ -66,28 +66,28 @@ layout: null
 				xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 				xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 		{% for post in site.posts %}
-		<url>
-				<loc>{{ site.url }}{{ post.url }}</loc>
-				{% if post.lastmod == null %}
-				<lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
-				{% else %}
-				<lastmod>{{ post.lastmod | date_to_xmlschema }}</lastmod>
-				{% endif %}
+	<url>
+		<loc>{{ site.url }}{{ post.url }}</loc>
+		{% if post.lastmod == null %}
+		<lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
+		{% else %}
+		<lastmod>{{ post.lastmod | date_to_xmlschema }}</lastmod>
+		{% endif %}
 
-				{% if post.sitemap.changefreq == null %}
-				<changefreq>weekly</changefreq>
-				{% else %}
-				<changefreq>{{ post.sitemap.changefreq }}</changefreq>
-				{% endif %}
+		{% if post.sitemap.changefreq == null %}
+		<changefreq>weekly</changefreq>
+		{% else %}
+		<changefreq>{{ post.sitemap.changefreq }}</changefreq>
+		{% endif %}
 
-				{% if post.sitemap.priority == null %}
-				<priority>0.5</priority>
-				{% else %}
-				<priority>{{ post.sitemap.priority }}</priority>
-				{% endif %}
+		{% if post.sitemap.priority == null %}
+		<priority>0.5</priority>
+		{% else %}
+		<priority>{{ post.sitemap.priority }}</priority>
+		{% endif %}
 
-		</url>
-		{% endfor %}
+	</url>
+	{% endfor %}
 </urlset>{% endraw %}
 ```
 
@@ -147,17 +147,20 @@ Sitemap: https://<username>.github.io/sitemap.xml
 5. 이제 원격 `GitHub`의 `Repository`에 `add`, `commit`, `push`하고 3번 과정에서 누르지 않았던 확인 버튼을 눌러서 등록 완료합니다.
 
 #### **sitemap.xml를 Google Search Console에 제출**
-앞서 말씀드린대로 `Google`이 내 블로그를 더 빠르고 정확하게 크롤링할 수 있도록 하기 위해서 `sitemap.xml`을 생성했었는데요. 이를 `Google Search Console`에 제출하지 않더라도 제대로 작동하지만, 검색 엔진이 이 파일의 존재를 반드시 인식한다고 보장할 수는 없습니다. 그래서 보다 확실하게 하기 위해서 이와 같은 작업을 한다고 생각하시면 되겠습니다. <br><br>
+앞서 말씀드린대로 `Google`이 내 블로그를 더 빠르고 정확하게 크롤링할 수 있도록 하기 위해서 `sitemap.xml`을 생성했었는데요. 이를 `Google Search Console`에 제출하지 않더라도 제대로 작동하지만, 검색 엔진이 이 파일의 존재를 반드시 인식한다고 보장할 수는 없습니다.
+> **보다 확실하게 검색 엔진이 `sitemap.xml`을 인식할 수 있도록 이와 같은 작업을 시행합니다.**
+> 
 아래의 그림과 같이 `Google Search Console`의 `Sitemaps` 항목에 들어가서 `새 사이트맵 추가`에서 `sitemap.xml`을 입력하고 제출합니다.
 ![5](/assets/img/2025-06-29-gitblog-gen-3/5.png){: .shadow .rounded-10}
 
-> 하지만 아래의 화면처럼 `상태`가 `가져올 수 없음`이 되어 있습니다. 기다리면 해결되니 걱정말고 기다리시면 됩니다.
+> 하지만 아래의 화면처럼 `상태`가 `가져올 수 없음`이 되어 있습니다.
 ![6](/assets/img/2025-06-29-gitblog-gen-3/6.png){: .shadow .rounded-10}
+기다리면 해결되는 경우도 많지만, 
 {: .prompt-info }
+## **(Optional) 메타태그 노출 방지**
+이때까지 우리는 수정했던 소스코드를 `GitHub`에 `push`해서 업데이트 했습니다. 그러다보니 메타태그와 같이 노출이 꺼려지는 정보까지 노출되는 경우가 생기게 되었습니다. 메타태그가 노출되었다고 해도 보안적으로 크게 문제될 것은 없지만, 의도치 않게 민감한 정보가 외부에 공개될 수 있다는 점에서 주의가 필요합니다.
 
-#### **(Optional) 메타태그 노출 방지**
-위의 방법대로만 하면 문제없이 블로그가 
-
+#### 
 
 ## 마치며
 이번 포스트에는 `Google` 검색 엔진에 노출에 내 블로그를 노출시켰습니다. 하지만 이 방법으로는
