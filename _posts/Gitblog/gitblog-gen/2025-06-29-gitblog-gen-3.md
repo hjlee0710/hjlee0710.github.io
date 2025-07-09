@@ -121,6 +121,9 @@ Sitemap: https://<username>.github.io/sitemap.xml
 > 이 포스트는 Chirpy 테마(ver. 7.3.0) 기준으로 작성했습니다. 만약에 다른 테마를 사용하신다면, 3번에서 `권장 확인 방법`을 따라하시길 바랍니다.
 {: .prompt-warning}
 
+> 이 포스트는 `메타태그`를 최대한 다른 사람들에게 노출시키지 않는 방향으로 작성했습니다. 이를 위해서 [`GitHub Actions`의 `Repository Variables`를 사용](https://docs.github.com/ko/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#creating-configuration-variables-for-a-repository)했습니다.<br>
+참고로, 소유권 확인을 위한 `메타태그`의 노출은 보안상으로 크게 문제 될 것은 없습니다.
+{: .prompt-info}
 
 1. 먼저, [`Google Search Console`](https://search.google.com/search-console/welcome?utm_source=about-page)에 들어가서 아래의 사진처럼 `URL 접두어`에 블로그 도메인을 입력해줍니다.
 ![1](/assets/img/2025-06-29-gitblog-gen-3/1.png){: .shadow .rounded-10}
@@ -131,34 +134,39 @@ Sitemap: https://<username>.github.io/sitemap.xml
 3. `권장 확인 방법`에 표시한대로 `HTML` 파일을 `root`에 다운로드 시켜도 되지만, 저는 `HTML 태그`를 사용해서 소유권 확인을 해보도록 하겠습니다. 아래의 그림대로 `메타태그`를 복사합니다.
 ![3](/assets/img/2025-06-29-gitblog-gen-3/3.png){: width="400" .shadow .rounded-10}
 
-4. 복사한 `메타태그`를 `Local`의 `root`에 위치한 `_config.yml`에 입력해야 합니다. `_config.yml`의 `webmaster_verifications` 항목에서 `google:`에 태그 내용을 입력합니다. 이때, 입력하는 내용은 복사한 `메타태그`의 `content`입니다.
+4. 복사한 `메타태그`를 `_config.yml`에 입력해야 합니다. 하지만, `메타태그`를 그대로 `_config.yml`에 입력하면 추후 `GitHub`에 업로드하면서 `메타태그`가 노출됩니다. 이를 방지하기 위해서 `GitHub Actions`의 `Repository Variables`를 등록해주도록 하겠습니다.<br>
+아래의 그림의 순서대로 **Settings>Secrets and variables>Actions>Variables>New repository variable**를 클릭합니다.
+![3_1](/assets/img/2025-06-29-gitblog-gen-3/3_1.png){: .shadow .rounded-10}
+이후 아래와 같이 입력하여 `메타태그`를 `Repository Variables`에 등록합니다.
+![3_2](/assets/img/2025-06-29-gitblog-gen-3/3_2.png){: .shadow .rounded-10}
+
+5. `Repository Variables`를 `_config.yml`에서 사용할 수 있도록 `vars` 컨텍스트를 사용합니다. `_config.yml`의 `webmaster_verifications` 항목에서 `google:`에 `${% raw %}{{ vars.GOOGLE_VERIFICATION }}{% endraw %}`를 아래와 같이 입력합니다.
 	```yaml
-	# Site Verification Settings
+	{% raw %}# Site Verification Settings
 	webmaster_verifications:
-		# 복사한 메타태그가 <meta name="google-site-verification" content="~~~~~~" /> 라면,
-		# ~~~~~~를 (여기에 입력)으로 표시한 곳에 넣으시면 됩니다.
-		google: (여기에 입력) 
+		google: ${{ vars.GOOGLE_VERIFICATION }}
 		bing: # fill in your Bing verification code
 		alexa: # fill in your Alexa verification code
 		yandex: # fill in your Yandex verification code
 		baidu: # fill in your Baidu verification code
-		facebook: # fill in your Facebook verification code
-	```
-5. 이제 원격 `GitHub`의 `Repository`에 `add`, `commit`, `push`하고 3번 과정에서 누르지 않았던 확인 버튼을 눌러서 등록 완료합니다.
+		facebook: # fill in your Facebook verification code{% endraw %}
+	```	
+6. 이제 원격 `GitHub`의 `Repository`에 등록하기 위해서 `add`, `commit`, `push`하고 `3번` 과정에서 누르지 않았던 확인 버튼을 눌러서 등록 완료합니다.
 
 #### **sitemap.xml를 Google Search Console에 제출**
 앞서 말씀드린대로 `Google`이 내 블로그를 더 빠르고 정확하게 크롤링할 수 있도록 하기 위해서 `sitemap.xml`을 생성했었는데요. 이를 `Google Search Console`에 제출하지 않더라도 제대로 작동하지만, 검색 엔진이 이 파일의 존재를 반드시 인식한다고 보장할 수는 없습니다.
 > **보다 확실하게 검색 엔진이 `sitemap.xml`을 인식할 수 있도록 이와 같은 작업을 시행합니다.**
-> 
+
 아래의 그림과 같이 `Google Search Console`의 `Sitemaps` 항목에 들어가서 `새 사이트맵 추가`에서 `sitemap.xml`을 입력하고 제출합니다.
 ![5](/assets/img/2025-06-29-gitblog-gen-3/5.png){: .shadow .rounded-10}
 
-> 하지만 아래의 화면처럼 `상태`가 `가져올 수 없음`이 되어 있습니다.
+> 하지만 아래의 화면처럼 `상태`가 `가져올 수 없음`이 되어 있을 가능성이 매우 높습니다.
 ![6](/assets/img/2025-06-29-gitblog-gen-3/6.png){: .shadow .rounded-10}
-기다리면 해결되는 경우도 많지만, 
+기다리면 해결되는 경우도 많지만, 해결되지 않는 경우에는 아래의 그림과 같이 `URL 검사 도구`를 활용하는 방법도 있습니다.
+![7](/assets/img/2025-06-29-gitblog-gen-3/7.png){: .shadow .rounded-10}
 {: .prompt-info }
-## **(Optional) 메타태그 노출 방지**
-이때까지 우리는 수정했던 소스코드를 `GitHub`에 `push`해서 업데이트 했습니다. 그러다 보니 메타태그와 같이 노출이 꺼려지는 정보까지 노출되는 경우가 생기게 되었습니다. 메타태그가 노출되었다고 해도 보안적으로 크게 문제될 것은 없지만, 의도치 않게 민감한 정보가 외부에 공개될 수 있다는 점에서 주의가 필요합니다.
+## **(Optional) BFG로 모든 Commit log 삭제**
+위의
 
 
 
