@@ -158,9 +158,26 @@ Sitemap: https://<username>.github.io/sitemap.xml
 기다리면 해결되는 경우도 많지만, 
 {: .prompt-info }
 ## **(Optional) 메타태그 노출 방지**
-이때까지 우리는 수정했던 소스코드를 `GitHub`에 `push`해서 업데이트 했습니다. 그러다보니 메타태그와 같이 노출이 꺼려지는 정보까지 노출되는 경우가 생기게 되었습니다. 메타태그가 노출되었다고 해도 보안적으로 크게 문제될 것은 없지만, 의도치 않게 민감한 정보가 외부에 공개될 수 있다는 점에서 주의가 필요합니다.
+이때까지 우리는 수정했던 소스코드를 `GitHub`에 `push`해서 업데이트 했습니다. 그러다 보니 메타태그와 같이 노출이 꺼려지는 정보까지 노출되는 경우가 생기게 되었습니다. 메타태그가 노출되었다고 해도 보안적으로 크게 문제될 것은 없지만, 의도치 않게 민감한 정보가 외부에 공개될 수 있다는 점에서 주의가 필요합니다.
 
-#### 
 
+
+BFG를 사용해서 이전 commit 내용 삭제
+
+#### asdfasdff
+
+1. java 설치
+
+	```bash
+	sudo apt install default-jre
+	```
+2. bfg로` _config.yml`관련 commit 전부 삭제
+java -jar </Path/to/bfg.jar> --delete-files '_config.yml'
+
+3. 불필요한 히스토리 제거
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+
+4. 강제로 `push`
+git push --force
 ## 마치며
 이번 포스트에는 `Google` 검색 엔진에 노출에 내 블로그를 노출시켰습니다. 하지만 이 방법으로는
