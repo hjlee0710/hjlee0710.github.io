@@ -3,6 +3,7 @@ title: "[Gitblog] Jekyll 기반  Chirpy 테마 Gitblog 생성 - ① 환경설정
 categories:
 - Gitblog
 - Jekyll기반  Chirpy 테마 Gitblog 생성
+img_path: /assets/img/posts/gitblog/gitblog-gen/2025-05-30-gitblog-gen-1/
 ---
 
 ## **Gitblog란?**
@@ -89,7 +90,7 @@ rbenv -v
 ```bash
 rbenv install -l
 ```
-![1](/assets/img/2025-05-30-gitblog-gen-1/1.png){: .shadow .rounded-10}
+![1]({{ page.img_path }}/1.png){: .shadow .rounded-10}
 7. 설치 가능한 `Ruby` 버전 중 필요한 버전을 설치하도록 합니다. 저 같은 경우는 위에 그림
 8. 에서 알 수 있듯이 3.4.4 버전이 가장 최신 버전이네요.
 ```bash
@@ -103,7 +104,7 @@ rbenv global 3.4.4 //7번에서 어떤 버전을 선택했는가에 따라 다�
 ```bash
 ruby -v
 ```
-![2](/assets/img/2025-05-30-gitblog-gen-1/2.png){: .shadow .rounded-10}
+![2]({{ page.img_path }}/2.png){: .shadow .rounded-10}
 
 
 ##### **(Optional) 패키지 Repository로 Ruby 설치(❌ 비추천)**

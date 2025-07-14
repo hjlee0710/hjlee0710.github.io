@@ -3,6 +3,7 @@ title: "[Gitblog] Jekyll 기반 Chirpy 테마 Gitblog 수정 -  ① _config.yml 
 categories:
 - Gitblog
 - Jekyll기반 Chirpy 테마 Gitblog 수정
+img_path: /assets/img/posts/gitblog/gitblog-mod/2025-06-16-gitblog-mod-1
 ---
 
 ## **_config.yml 수정**
@@ -30,7 +31,7 @@ categories:
 	: 블로그에서 가장 중요한 제목입니다. `Sidebar`에 블로그의 제목을 확인할 수 있고 블로그 `Home`에 접속했을 때,  `Tap`에서도 블로그 제목을 확인할 수 있습니다.
 	- tagline
 	: 부제목입니다. `Sidebar`에 블로그의 제목 바로 밑에 확인할 수 있습니다.
-	![1](/assets/img/2025-06-16-gitblog-mod-1/1.png){: .shadow .rounded-10}
+	![1]({{ page.img_path }}/1.png){: .shadow .rounded-10}
 	- description
 	: `meta` 태그용 긴 설명입니다. 이 설명은 블로그를 검색했을때, 아래의 그림처럼 블로그에 대한 설명으로 나타나게 됩니다.
 	- url

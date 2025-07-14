@@ -3,6 +3,7 @@ title: "[Gitblog] Jekyll 기반 Chirpy 테마 Gitblog 생성 -  ② Chirpy 테�
 categories:
 - Gitblog
 - Jekyll기반  Chirpy 테마 Gitblog 생성
+img_path: /assets/img/posts/gitblog/gitblog-gen/2025-06-16-gitblog-gen-2
 ---
 
 ## **Chirpy 테마란?**
@@ -41,13 +42,13 @@ categories:
 
 1. `GitHub`에 로그인하기
 2. [`Repository`를 `Fork`하고](https://github.com/cotes2020/jekyll-theme-chirpy/fork) 붉은 박스 안의 내용 수정하기
-![1](/assets/img/2025-06-16-gitblog-gen-2/1.png){: .shadow .rounded-10}
+![1]({{ page.img_path }}/1.png){: .shadow .rounded-10}
   - Owner
   : 자신이 생성하고자 하는 `Owner`를 골라주세요.
   - Repository name
   : `jekyll-theme-chirpy`대신에 `<username>.github.io`를 입력해야 합니다. 이때, `<username>`대신에 자신의 `GitHub username`을 소문자로 입력해주셔야 합니다. 왠만하면 `Owner`과 동일합니다.
 3. [`GitHub Actions`](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow)를 사용하여 `Repository`를 배포할 수 있도록 설정합니다. 아래의 그림에서처럼 붉은 박스를 따라 **Settings > Pages > Build and deployment > Source > GitHub Actions**와 같이 설정해줍니다.
-![2](/assets/img/2025-06-16-gitblog-gen-2/2.png){: .shadow .rounded-10}
+![2]({{ page.img_path }}/2.png){: .shadow .rounded-10}
 
 
 >`GitHub` Free 플랜을 사용하신다면 `Repository`는 공개(public) 상태여야 합니다.
@@ -79,7 +80,7 @@ bundle
 bundle exec jekyll serve
 ```
 아래 그림의 붉은 박스로 표시한 주소(`http://127.0.0.1:4000/`)를 주소창에 입력하여 `Local` 환경에서 블로그가 제대로 생성되었는지 확인할 수 있습니다.
-![3](/assets/img/2025-06-16-gitblog-gen-2/3.png){: .shadow .rounded-10}
+![3]({{ page.img_path }}/3.png){: .shadow .rounded-10}
 
 > `livereload`옵션을 사용하시면 `Local` 환경에서 수정하는대로 바로 반영할 수 있습니다. 하지만 `_config.yml`은 수정해도 바로 반영되지 않습니다.
 > ```bash
@@ -93,7 +94,7 @@ bundle exec jekyll serve
 지금까지는 `Local` 환경 `Repository`에서만 수정하고 제대로 작동하는지 확인했습니다. 이제는 수정한 `Local` 환경 `Repository`를 `Remote` 환경에 업로드해서 온라인에서 제 블로그에 접근할 수 있는지 확인해보도록 하겠습니다.
 
 1. 업로드 하기 전에 먼저, `_config.yml`를 수정해야합니다. `_config.yml`는 `<username>.github.io` 디렉토리에 바로 위치하고 있기 때문에 찾기 쉽습니다.
-![4](/assets/img/2025-06-16-gitblog-gen-2/4.png){: .shadow .rounded-10}
+![4]({{ page.img_path }}/4.png){: .shadow .rounded-10}
 위의 사진은 `_config.yml` 내용의 일부입니다. 다양한 설정값이 있지만 일단은 배포가 목적이기 때문에 `url`설정만 바꿔주도록 하겠습니다. 나머지 설정은 [차후](../gitblog-mod-1)에 다루도록 하겠습니다. `<username>` 대신에 자신의 `GitHub username`을 입력해주세요.
 ```yaml
 url: "https://<username>.github.io"
@@ -107,16 +108,16 @@ git push origin master
 ```
 
 3. 업로드를 하면 아래의 화면과 같이 `GitHub`에서 붉은 박스로 표시한 것 처럼 검토가 진행됩니다.
-![5_1](/assets/img/2025-06-16-gitblog-gen-2/5_1.png){: .shadow .rounded-10}
+![5_1]({{ page.img_path }}/5_1.png){: .shadow .rounded-10}
 업로드가 성공한다면 붉은 박스로 표시한 것 처럼 `Sucess`를 확인할 수 있어요.
-![5_2](/assets/img/2025-06-16-gitblog-gen-2/5_2.png){: .shadow .rounded-10}
+![5_2]({{ page.img_path }}/5_2.png){: .shadow .rounded-10}
 
 4. 마지막으로 `https://<username>.github.io`를 주소창에 입력하여, 배포가 되었는지 확인합니다.<br>
 (`Sucess`를 확인해도 `Update`를 하는데는 3분 정도 기다려야 합니다.)
-![6](/assets/img/2025-06-16-gitblog-gen-2/6.png){: .shadow .rounded-10}
+![6]({{ page.img_path }}/6.png){: .shadow .rounded-10}
 
 > 앗! `Fail`이 떴네요. 하지만 너무 걱정하지 마세요. 이유를 자세하게 설명해주거든요. 아래의 그림에서는 잘못된 링크를 걸어서 문제가 발생했네요.
-> ![5_3](/assets/img/2025-06-16-gitblog-gen-2/5_3.png){: .shadow .rounded-10}
+> ![5_3]({{ page.img_path }}/5_3.png){: .shadow .rounded-10}
 {: .prompt-tip}
 ## **마치며**
 ---

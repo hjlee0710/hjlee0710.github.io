@@ -3,6 +3,7 @@ title: "[Gitblog] Jekyll 기반 Chirpy 테마 Gitblog 생성 - ③ Google 검색
 categories:
 - Gitblog
 - Jekyll기반  Chirpy 테마 Gitblog 생성
+img_path: "/assets/img/posts/gitblog/gitblog-gen/2025-06-29-gitblog-gen-3"
 ---
 
 ## **검색 엔진 노출?**
@@ -97,21 +98,27 @@ layout: null
 {: .prompt-info }
 
 > 위의 코드에서 for문을 통해 `<loc>`에 어떤 페이지의 `URL`을 불러오는지 궁금하시다면  `Local`에서는 `http://localhost:4000/sitemap.xml`를 주소창에 입력하시거나 업로드한 블로그에서는 `https://<username>.github.io/sitemap.xml`을 입력하시면 됩니다.
-> ![4](/assets/img/2025-06-29-gitblog-gen-3/4.png){: .shadow .rounded-10}
+> ![4]({{ page.img_path }}/4.png){: .shadow .rounded-10}
 {: .prompt-info }
 
 #### **robots.txt 생성**
-> **`Local`의 `Root`에 아래의 코드를 파일명 `robots.txt`로 생성하시면 됩니다.**
-
-> `<username>`은 알맞게 수정해야합니다.
-{: .prompt-warning }
+우리가 사용하고 있는 `chirpy` 테마에서는 `robots.txt`가 `/assets`에 위치하고 있습니다.  그대로 가져와서 `Root` 에 옮겨놓습니다. <br>
+`chirpy` 테마 버전에 따라 `/assets`에 `robots.txt`가 없을 수도 있습니다. 만약에 그런 경우라면, `Root`에 아래의 코드를 파일명 `robots.txt`로 생성하시면 됩니다.
 
 ```
+{% raw %}---
+permalink: /robots.txt
+# The robots rules
+---
+
 User-agent: *
 Allow: /
 
-Sitemap: https://<username>.github.io/sitemap.xml
+Sitemap: {{ '/sitemap.xml' | absolute_url }}{% endraw %}
 ```
+> `robots.txt`가 겹치게 되면 아래와 같은 오류가 발생할 수 있습니다.
+![ 4_1]({{ page.img_path }}/4_1.png){: .shadow .rounded-10}
+{: .prompt-info }
 
 > 커스텀을 위해서 `User-agent`, `Allow` 등등 각 항목의 내용을 이해하고 싶으시다면, [Google 검색 센터 robots.txt 파일 작성 및 제출 방법](https://developers.google.com/search/docs/crawling-indexing/robots/create-robots-txt?hl=ko)을 참고해 주세요.
 {: .prompt-info }
@@ -125,20 +132,23 @@ Sitemap: https://<username>.github.io/sitemap.xml
 참고로, 소유권 확인을 위한 `메타태그`의 노출은 보안상으로 크게 문제 될 것은 없습니다.
 {: .prompt-info}
 
+> 만약에, 벌써 `메타태그`가 기록되어 있는 소스코드를 업로드 하셨다면 [[Git] BFG로 Commit log 삭제](../git-bfg-1)를 참고하여 `Commit log`를 삭제해주세요.
+{: .prompt-info }
+
 1. 먼저, [`Google Search Console`](https://search.google.com/search-console/welcome?utm_source=about-page)에 들어가서 아래의 사진처럼 `URL 접두어`에 블로그 도메인을 입력해줍니다.
-![1](/assets/img/2025-06-29-gitblog-gen-3/1.png){: .shadow .rounded-10}
+![1]({{ page.img_path }}/1.png){: .shadow .rounded-10}
 
 2. 이후 아래의 창이 뜨면, `속성으로 이동`을 클릭합니다.
-![2](/assets/img/2025-06-29-gitblog-gen-3/2.png){: width="400"   .shadow .rounded-10}
+![2]({{ page.img_path }}/2.png){: width="400"   .shadow .rounded-10}
 
 3. `권장 확인 방법`에 표시한대로 `HTML` 파일을 `root`에 다운로드 시켜도 되지만, 저는 `HTML 태그`를 사용해서 소유권 확인을 해보도록 하겠습니다. 아래의 그림대로 `메타태그`를 복사합니다.
-![3](/assets/img/2025-06-29-gitblog-gen-3/3.png){: width="400" .shadow .rounded-10}
+![3]({{ page.img_path }}/3.png){: width="400" .shadow .rounded-10}
 
 4. 복사한 `메타태그`를 `_config.yml`에 입력해야 합니다. 하지만, `메타태그`를 그대로 `_config.yml`에 입력하면 추후 `GitHub`에 업로드하면서 `메타태그`가 노출됩니다. 이를 방지하기 위해서 `GitHub Actions`의 `Repository Variables`를 등록해주도록 하겠습니다.<br>
 아래의 그림의 순서대로 **Settings>Secrets and variables>Actions>Variables>New repository variable**를 클릭합니다.
-![3_1](/assets/img/2025-06-29-gitblog-gen-3/3_1.png){: .shadow .rounded-10}
+![3_1]({{ page.img_path }}/3_1.png){: .shadow .rounded-10}
 이후 아래와 같이 입력하여 `메타태그`를 `Repository Variables`에 등록합니다.
-![3_2](/assets/img/2025-06-29-gitblog-gen-3/3_2.png){: .shadow .rounded-10}
+![3_2]({{ page.img_path }}/3_2.png){: .shadow .rounded-10}
 
 5. `Repository Variables`를 `_config.yml`에서 사용할 수 있도록 `vars` 컨텍스트를 사용합니다. `_config.yml`의 `webmaster_verifications` 항목에서 `google:`에 `${% raw %}{{ vars.GOOGLE_VERIFICATION }}{% endraw %}`를 아래와 같이 입력합니다.
 	```yaml
@@ -158,34 +168,14 @@ Sitemap: https://<username>.github.io/sitemap.xml
 > **보다 확실하게 검색 엔진이 `sitemap.xml`을 인식할 수 있도록 이와 같은 작업을 시행합니다.**
 
 아래의 그림과 같이 `Google Search Console`의 `Sitemaps` 항목에 들어가서 `새 사이트맵 추가`에서 `sitemap.xml`을 입력하고 제출합니다.
-![5](/assets/img/2025-06-29-gitblog-gen-3/5.png){: .shadow .rounded-10}
+![5]({{ page.img_path }}/5.png){: .shadow .rounded-10}
 
-> 하지만 아래의 화면처럼 `상태`가 `가져올 수 없음`이 되어 있을 가능성이 매우 높습니다.
-![6](/assets/img/2025-06-29-gitblog-gen-3/6.png){: .shadow .rounded-10}
-기다리면 해결되는 경우도 많지만, 해결되지 않는 경우에는 아래의 그림과 같이 `URL 검사 도구`를 활용하는 방법도 있습니다.
-![7](/assets/img/2025-06-29-gitblog-gen-3/7.png){: .shadow .rounded-10}
+> 결과적으로 아래의 화면처럼 `상태`가 `가져올 수 없음`이 되어 있을 가능성이 매우 높습니다.
+![6]({{ page.img_path }}/6.png){: .shadow .rounded-10}
+기다리면 해결되는 경우도 많지만, 해결되지 않는 경우에는 아래의 그림과 같이 `URL 검사 도구`를 활용하면 된다고 합니다.
+![7]({{ page.img_path }}/7.png){: .shadow .rounded-10}
+하지만 저는 이 방법을 사용해도 `상태`가 바로 바뀌지 않아서 일주일 정도를 기다려볼 예정입니다.
 {: .prompt-info }
-## **(Optional) BFG로 모든 Commit log 삭제**
-위의
 
-
-
-BFG를 사용해서 이전 commit 내용 삭제
-
-#### asdfasdff
-
-1. java 설치
-
-	```bash
-	sudo apt install default-jre
-	```
-2. bfg로` _config.yml`관련 commit 전부 삭제
-java -jar </Path/to/bfg.jar> --delete-files '_config.yml'
-
-3. 불필요한 히스토리 제거
-git reflog expire --expire=now --all && git gc --prune=now --aggressive
-
-4. 강제로 `push`
-git push --force
-## 마치며
-이번 포스트에는 `Google` 검색 엔진에 노출에 내 블로그를 노출시켰습니다. 하지만 이 방법으로는
+## **마치며**
+이번 포스트에는 `Google` 검색 엔진에 내 블로그를 노출시켜봤습니다. 혼자서 지식을 정리하는 것도 좋지만 시행착오로 습득한 지식은 남들과 공유하고 싶어지는 것 같습니다. 이번 포스트에서 제가 강조하고 싶은 부분은 [`Google Search Console`에 블로그 도메인 등록하기](#google-search-console에-블로그-도메인-등록하기)에서 다른 포스트들 보다 보안을 조금 더 신경썼다는 점입니다. 이 포스트가 도움이 되면 좋겠습니다.
