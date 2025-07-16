@@ -11,6 +11,8 @@ img_path: "/assets/img/posts/gitblog/gitblog-gen/2025-06-29-gitblog-gen-3"
 
 앞선 작업들을 통해서 우리는 `Gitblog`를 생성하고 배포했습니다. 하지만 이것만으로는 검색 엔진에서 내 블로그가 쉽게 발견되지 않아, 오랜 시간 동안 나만 볼 수 있는 블로그로 남을 가능성이 높습니다. 검색 엔진이 크롤링을 하며 언젠가는 내 블로그를 찾아낼 수 있겠지만 꽤 오랜 시간을 기다려야 합니다. 내 블로그가 남들에게 노출될 때까지 마냥 기다리는 방법도 있긴 하지만, 빠른 기간 내에 다른 사람들에게 노출시키기 위해서는 `Google`과 같은 검색 엔진이 크롤링을 잘 할 수 있도록 직접 노출시켜야 합니다. 저는 `Google` 검색 엔진에 제 블로그를 노출시키고 싶기 때문에 이와 관련된 `Google Search Console`, `sitemap.xml`, `robots.txt`에 대한 설명을 해보도록 하겠습니다.
 
+![0]({{ page.img_path }}/0.png){: .shadow .rounded-10}
+
 #### **Google Search Console란?**
 
 > [Google Search Console 도움말](https://support.google.com/webmasters/answer/9128668?hl=ko&ref_topic=9128571&sjid=4295738945476696937-NC)을 참고하여 작성했습니다.
