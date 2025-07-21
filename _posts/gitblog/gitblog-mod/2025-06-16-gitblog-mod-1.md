@@ -1,5 +1,5 @@
 ---
-title: "[Gitblog] Jekyll 기반 Chirpy 테마 Gitblog 수정 -  ① _config.yml 수정"
+title: "[Gitblog] Jekyll 기반 Chirpy 테마 Gitblog 수정 - _config.yml 수정"
 categories:
 - Gitblog
 - Jekyll기반 Chirpy 테마 Gitblog 수정
