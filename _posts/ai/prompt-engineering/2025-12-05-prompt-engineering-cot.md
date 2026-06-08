@@ -193,16 +193,25 @@ image:
 실험 결과를 요약하면 아래의 그림과 같습니다. 이 실험으로 도출된 세가지 핵심 요점이 있다고 합니다. 자세한 실험 결과를 확인하고 싶으시다면 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 2`를 읽어보세요.
 ![4]({{ page.img_path }}/4.png){: .shadow .w-50 .rounded-10}
 
-1. **CoT Prompting은 LLM에서 모델 Scale에 따라 `Emergent Ability`이 보입니다.**
+1. **CoT Prompting은 LLM에서 모델 Scale에 따라 `Emergent Ability`가 보입니다.**
+	- 위의 실험 결과 그림을 보면 알 수 있듯이 `100B`보다 큰 규모의 모델에서는 `Emergent Ability`가 보입니다.
+	- 소형 모델들은 문법적으로는 유창하지만, 논리적으로 맞지 않는 `CoT`를 생성해 오히려 `Standard Prompting`보다 성능이 더 낮은 경우도 있다고 합니다.
 
-> **`Emergent Ability`란?**
-> <br>모델의 규모가 일정 수준을 넘었을 때, 이전에는 보이지 않던 새로운 능력이 갑자기 나타나는 현상입니다. 예를 들면, 위의 그림에서 `GPT`를 `SVAMP` 데이터셋으로 실험한 결과를 살펴봤을때, 규모(`scale`)가 7B를 넘기는 순간부터 갑자기 `solve rate`가 향상되는 모습을 볼 수 있습니다. [`"Emergent Abilities of Large Language Models"`](https://arxiv.org/abs/2206.07682) 논문을 참고해주세요.
-{: .prompt-info}
+	> **`Emergent Ability`란?**
+	> <br>모델의 규모가 일정 수준을 넘었을 때, 이전에는 보이지 않던 새로운 능력이 갑자기 나타나는 현상입니다. 위의 그림에서 `GPT`를 `GSM8K` 데이터셋으로 실험한 결과를 살펴봤을때, 규모(`scale`)가 7B일 때는 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 크게 나지 않습니다. 하지만 178B에서 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 확실하게 나오면서 `Emergent Ability`가 발생했다고 볼 수 있습니다. [`"Emergent Abilities of Large Language Models"`](https://arxiv.org/abs/2206.07682) 논문을 참고해주세요.
+	{: .prompt-info}
 
 2. **문제 난이도가 높을수록 CoT의 성능 향상이 더 큽니다.**
-3. **GPT-3 175B 및 PaLM 540B는 기존 `SOTA`와 비교해도 뛰어납니다.**
+	- `GSM8K` 데이터셋과 같이 난이도가 높은 문제에서는 `GPT` 및 `PaLM`과 같은 대형 모델에서 `CoT prompting`이 모델의 성능을 2배 이상 향상시킵니다.
+	- 반면, `MAWPS`처럼 단계가 한 번이면 풀리는 난이도가 낮은 문제에서는 성능 향상이 없거나 오히려 떨어지기도 한다고 합니다.
+	<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 3`를 참고하시면 더 잘 이해할 수 있을 것입니다.)
 
-- ****
+	> **`데이테셋의 문제 난이도`란?**
+	> <br>문제 난이도는 위의 실험 결과 그림의 `Standard prompting` 실험 결과로 판단합니다. `GSM8K` 데이터셋은 모델의 규모가 커져도 `solve rate`가 `20%`로 넘기지 못하며 크게 향상되지 않습니다. 반면에 `MAWPS` 데이터셋은 규모가 `100B`를 넘겼을때, `solve rate`가 크게 향상됩니다. 그래서 `GSM8K`은 비교적 문제의 난이도가 높다고 하고 `MAWPS`는 비교적 문제의 난이도가 낮다고 합니다.
+	{: .prompt-info}
+
+3. **GPT-3 175B 및 PaLM 540B는 기존 `SOTA`와 비교해도 뛰어납니다.**
+	- ****
 
 ![5]({{ page.img_path }}/5.png){: .shadow .rounded-10}
 
