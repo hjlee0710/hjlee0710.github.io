@@ -190,33 +190,121 @@ image:
 	{: .prompt-info}
 
 #### **실험 결과**
-실험 결과를 요약하면 아래의 그림과 같습니다. 이 실험으로 도출된 세가지 핵심 요점이 있다고 합니다. 자세한 실험 결과를 확인하고 싶으시다면 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 2`를 읽어보세요.
+실험 결과를 요약하면 아래의 `Figure 4`와 같습니다. 이 실험으로 도출된 세가지 핵심 요점이 있다고 합니다. 자세한 실험 결과를 확인하고 싶으시다면 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 2`를 읽어보세요.
 ![4]({{ page.img_path }}/4.png){: .shadow .w-50 .rounded-10}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 4`_
+![5]({{ page.img_path }}/5.png){: .shadow .rounded-10}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 2`_
 
 1. **CoT Prompting은 LLM에서 모델 Scale에 따라 `Emergent Ability`가 보입니다.**
-	- 위의 실험 결과 그림을 보면 알 수 있듯이 `100B`보다 큰 규모의 모델에서는 `Emergent Ability`가 보입니다.
+	- 위의 `Figure 4`를 보면 알 수 있듯이 `100B`보다 큰 규모의 모델에서는 `Emergent Ability`가 보입니다.
 	- 소형 모델들은 문법적으로는 유창하지만, 논리적으로 맞지 않는 `CoT`를 생성해 오히려 `Standard Prompting`보다 성능이 더 낮은 경우도 있다고 합니다.
 
 	> **`Emergent Ability`란?**
-	> <br>모델의 규모가 일정 수준을 넘었을 때, 이전에는 보이지 않던 새로운 능력이 갑자기 나타나는 현상입니다. 위의 그림에서 `GPT`를 `GSM8K` 데이터셋으로 실험한 결과를 살펴봤을때, 규모(`scale`)가 7B일 때는 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 크게 나지 않습니다. 하지만 178B에서 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 확실하게 나오면서 `Emergent Ability`가 발생했다고 볼 수 있습니다. [`"Emergent Abilities of Large Language Models"`](https://arxiv.org/abs/2206.07682) 논문을 참고해주세요.
+	> <br>모델의 규모가 일정 수준을 넘었을 때, 이전에는 보이지 않던 새로운 능력이 갑자기 나타나는 현상입니다. 위의 `Figure 4`에서 `GPT`를 `GSM8K` 데이터셋으로 실험한 결과를 살펴봤을때, 규모(`scale`)가 7B일 때는 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 크게 나지 않습니다. 하지만 178B에서 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 확실하게 나오면서 `Emergent Ability`가 발생했다고 볼 수 있습니다. [`"Emergent Abilities of Large Language Models"`](https://arxiv.org/abs/2206.07682) 논문을 참고해주세요.
 	{: .prompt-info}
 
 2. **문제 난이도가 높을수록 CoT의 성능 향상이 더 큽니다.**
-	- `GSM8K` 데이터셋과 같이 난이도가 높은 문제에서는 `GPT` 및 `PaLM`과 같은 대형 모델에서 `CoT prompting`이 모델의 성능을 2배 이상 향상시킵니다.
+	> **`데이테셋의 문제 난이도`란?**
+	> <br>문제 난이도는 위의 `Figure 4`의 `Standard prompting` 실험 결과로 판단합니다. `GSM8K` 데이터셋은 모델의 규모가 커져도 `solve rate`가 `20%`로 넘기지 못하며 크게 향상되지 않습니다. 반면에 `MAWPS` 데이터셋은 규모가 `100B`를 넘겼을때, `solve rate`가 크게 향상됩니다. 그래서 `GSM8K`은 비교적 문제의 난이도가 높다고 하고 `MAWPS`는 비교적 문제의 난이도가 낮다고 합니다.
+	{: .prompt-info}
+
+	- 위의 `Figure 4`를 살펴보면, `GSM8K` 데이터셋과 같이 난이도가 높은 문제에서는 `GPT` 및 `PaLM`과 같은 대형 모델에서 `CoT prompting`이 모델의 성능을 2배 이상 향상시킵니다.
 	- 반면, `MAWPS`처럼 단계가 한 번이면 풀리는 난이도가 낮은 문제에서는 성능 향상이 없거나 오히려 떨어지기도 한다고 합니다.
 	<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 3`를 참고하시면 더 잘 이해할 수 있을 것입니다.)
 
-	> **`데이테셋의 문제 난이도`란?**
-	> <br>문제 난이도는 위의 실험 결과 그림의 `Standard prompting` 실험 결과로 판단합니다. `GSM8K` 데이터셋은 모델의 규모가 커져도 `solve rate`가 `20%`로 넘기지 못하며 크게 향상되지 않습니다. 반면에 `MAWPS` 데이터셋은 규모가 `100B`를 넘겼을때, `solve rate`가 크게 향상됩니다. 그래서 `GSM8K`은 비교적 문제의 난이도가 높다고 하고 `MAWPS`는 비교적 문제의 난이도가 낮다고 합니다.
-	{: .prompt-info}
-
 3. **GPT-3 175B 및 PaLM 540B는 기존 `SOTA`와 비교해도 뛰어납니다.**
-	- ****
+	- `CoT prompting`을 적용한 `PaLM 540B`는 `GSM8K`, `SVAMP`, `MAWPS`에서 새로운 최고 성능을 달성했습니다.
+	<br>(`GPT-3 175B`는 `SVAMP` 데이터셋으로 실험한 결과가 `SOTA`와 크게 다르지 않아서 `PaLM 540B`를 중정점으로 다룬 것 같습니다.)
+	- 단, `SVAMP`의 경우는 `Standard prompting`만으로도 기존 최고 성능을 이미 넘겼습니다.
+	- `GSM8K`, `SVAMP`, `MAWPS` 외의 나머지 두 데이터셋 (`AQuA`, `ASDiv`)에서는 `CoT prompting`를 적용한 `PaLM`의 성능이 `Standard prompting` 실험 값의 2% 이내로 근접함으로 큰 성능 향상은 보이지 않았습니다.
 
-![5]({{ page.img_path }}/5.png){: .shadow .rounded-10}
+위의 세가지의 핵심 요점 뿐만 아니라, **`CoT 추론이 왜 효과적인지?`**, **`모델 Scaling이 왜 CoT의 능력을 개선시키는지?`**에 대한 이유도 분석했다고 합니다.
 
-- **CoT Prompting은 LLM에서 모델 Scale에 따라 `Emergent Ability`이 보입니다.**
-: 
+CoT 추론이 왜 효과적인지?
+: 이를 확인하기 위해서 `LaMDA 137B`가 생성한 `CoT`를 수작업으로 분석했다고 합니다.
+- `GSM8K` 데이터셋에서 정답을 맞힌 50개의 랜덤 샘플 중, 48개는 논리적·수학적으로도 올바른 `CoT`를 생성했다고 합니다. 하지만 나머지 2개는 우연히 정답을 맞힌 경우였다고 합니다.
+<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix D.1`과 `Appendix Table 8`를 참고해주시면 되겠습니다.)
+
+- `GSM8K` 데이터셋에서 정답을 틀린 50개의 랜덤 샘플 중, 46%는 거의 맞았지만 사소한 실수(계산 실수, 기호 해석 오류, 한 단계 누락 등)가 있었다고 합니다. 나머지 54%는 주요한 의미 이해 실패나 논리 불일치 오류를 포함하고 있었다고 합니다.
+<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix D.2`를 참고해주시면 되겠습니다.)
+
+모델 Scaling이 왜 CoT의 능력을 개선시키는지?
+: `CoT` 능력이 `Scaling`(스케일 증가)와 함께 개선되는 이유를 파악하기 위해, `PaLM 62B`와 `PaLM 540B`가 만든 오류를 비교 분석했다고 합니다.
+- `PaLM 540B`는 `PaLM 62B` 모델에서 나타난 주요 오류 유형(단계 누락, 의미 이해 실패 등)을 상당 부분 해결했다고 합니다.
+<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix A.1`을 참고해주시면 되겠습니다.)
+
+#### **Ablation Study**
+`CoT prompting`이 성능을 향상시킨다는 결과가 관찰되면서, 자연스럽게 다음과 같은 의문이 제기됩니다.
+
+> **"이러한 성능 향상이 정말 CoT 자체 때문인가, 아니면 다른 형태의 프롬프팅으로도 동일한 효과를 얻을 수 있는가?"**
+
+이를 검증하기 위해 연구진은 아래의 `Figure 5`에서 제시된 세 가지 `Ablation Study`을 수행했다고 합니다.
+
+![6]({{ page.img_path }}/6.png){: .shadow .w-50 .rounded-10}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 5`_
+
+1. **Equation Only**
+- 실험 이유
+: `CoT prompting`이 효과적이라고 추정되는 이유 중 하나는 **"LLM이 문제를 해결하기 위해서 수학적 `Equation`을 생성하기 때문이다."**입니다. 그래서 이를 검증하기 위해서 `Equation Only`를 실험했다고 합니다.
+- 실험 조건
+: 모델이 최종 답변을 내기 전에 수학적 `Equation`만 출력하도록 하는 프롬프트를 실험했다고 합니다.
+- 실험 결과 
+: 위의 `Figure 5`를 보면 알 수 있듯이 `Equation Only` 방식은 `GSM8K` 데이터셋에서는 큰 도움을 주지 못했습니다. **이는 `CoT`에서 제공되는 자연어 기반 `Reasoning` 단계를 거치지 않고는 `GSM8K` 데이터셋 질문의 `Sementics(의미들)`를 `Equation`으로 변환하기 어렵다는 것을 시사한다고 합니다.** 
+: 반면, 한두 단계 정도의 단순한 `Reasoning`만 필요한 데이터셋에서는 `Equation Only` 방식이 실제로 성능을 향상시켰다고 합니다. 이러한 데이터에서는 질문으로부터 `Equation`을 비교적 쉽게 도출할 수 있기 때문입니다.
+<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 6`을 참고해주시면 되겠습니다.)
+
+2. **Variable Compute Only**
+- 실험 이유
+: `CoT prompting`이 효과적이라고 추정되는 이유 중 다른 하나는 **"`Reasoning` 과정 자체가 아니라, 모델이 더 많은 토큰을 생성하면서 더 많은 계산을 수행할 수 있기 때문이 아닐까?"**입니다. 그래서 이를 검증하기 위해서 `Variable Compute Only`를 실험했다고 합니다.
+
+
+CoT에서는 중간 추론 문장을 생성하므로 출력 토큰 수가 늘어난다. 따라서 모델이 어려운 문제에 대해 더 많은 계산 자원을 사용할 수 있게 된다는 설명이 가능하다.
+
+연구진은 이 효과를 CoT의 추론 효과와 분리하기 위해 특수한 실험을 수행하였다.
+
+모델에게 추론 문장을 생성하게 하지 않고, 대신 문제를 해결하는 데 필요한 수식 길이만큼 마침표(.)만 출력하도록 한 것이다.
+
+예를 들어,
+
+..............
+
+와 같은 형태의 출력만 생성하게 하여, 토큰 수는 CoT와 비슷하게 유지하되 실제 추론 내용은 제거하였다.
+
+실험 결과 이 방식은 기본 프롬프팅(Standard Prompting)과 거의 동일한 성능을 보였다.
+
+이는 단순히 계산량이나 출력 토큰 수가 증가하는 것만으로는 CoT의 성능 향상을 설명할 수 없음을 의미한다.
+
+즉,
+
+CoT의 효과는 "더 오래 생각해서"가 아니라, 자연어로 중간 추론 단계를 표현하는 과정 자체에서 비롯된다는 증거로 해석된다.
+
+3. Chain of Thought After Answer
+- CoT의 또 다른 가능성 있는 설명은 다음과 같다.
+
+CoT 프롬프트가 모델이 사전학습(pretraining) 과정에서 습득한 관련 지식을 더 잘 불러오도록 도와주는 것일 뿐 아닐까?
+
+만약 그렇다면 추론 과정이 실제로 답을 구하는 데 필요하지 않을 수도 있다.
+
+이를 검증하기 위해 연구진은 특이한 설정을 실험하였다.
+
+모델이 먼저 정답을 출력한 뒤,
+
+그 다음에 CoT 형태의 추론을 생성하도록 프롬프트를 구성한 것이다.
+
+즉,
+
+정답 → 추론
+
+순서로 출력하게 하여,
+
+실제로 최종 답을 생성할 때 CoT를 활용하는지 여부를 분리해서 측정하였다.
+
+실험 결과 이 방식 역시 기본 프롬프팅과 거의 동일한 성능을 보였다.
+
+이는 CoT의 효과가 단순히 관련 지식을 활성화(knowledge activation)시키는 데서 오는 것이 아니라는 점을 시사한다.
+
+오히려 CoT 안에 포함된 순차적(sequential) 추론 과정 자체가 최종 답변을 생성하는 데 실질적인 역할을 한다는 것을 보여준다.
 
 ### **Commonsense Reasoning 측정**
 
