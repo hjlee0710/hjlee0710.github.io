@@ -119,7 +119,7 @@ Allow: /
 Sitemap: {{ '/sitemap.xml' | absolute_url }}{% endraw %}
 ```
 > `robots.txt`가 겹치게 되면 아래와 같은 오류가 발생할 수 있습니다.
-![ 4_1]({{ page.img_path }}/4_1.png){: .shadow .rounded-10}
+![4_1]({{ page.img_path }}/4_1.png){: .shadow .rounded-10}
 {: .prompt-info }
 
 > 커스텀을 위해서 `User-agent`, `Allow` 등등 각 항목의 내용을 이해하고 싶으시다면, [Google 검색 센터 robots.txt 파일 작성 및 제출 방법](https://developers.google.com/search/docs/crawling-indexing/robots/create-robots-txt?hl=ko)을 참고해 주세요.
@@ -130,9 +130,12 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}{% endraw %}
 > 이 포스트는 Chirpy 테마(ver. 7.3.0) 기준으로 작성했습니다. 만약에 다른 테마를 사용하신다면, 3번에서 `권장 확인 방법`을 따라하시길 바랍니다.
 {: .prompt-warning}
 
-> 이 포스트는 `메타태그`를 최대한 다른 사람들에게 노출시키지 않는 방향으로 작성했습니다. 이를 위해서 [`GitHub Actions`의 `Repository Variables`를 사용](https://docs.github.com/ko/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#creating-configuration-variables-for-a-repository)했습니다.<br>
-참고로, 소유권 확인을 위한 `메타태그`의 노출은 보안상으로 크게 문제 될 것은 없습니다.
-{: .prompt-info}
+> ~~이 포스트는 `메타태그`를 최대한 다른 사람들에게 노출시키지 않는 방향으로 작성했습니다. 이를 위해서 [`GitHub Actions`의 `Repository Variables`를 사용](https://docs.github.com/ko/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#creating-configuration-variables-for-a-repository)했습니다.~~<br>
+~~참고로, 소유권 확인을 위한 `메타태그`의 노출은 보안상으로 크게 문제 될 것은 없습니다.~~<br>
+제가 제시한 방식의 **치명적인 문제**가 발생했습니다. 아래와 같은 오류가 뜬 것입니다.<br>
+![9]({{ page.img_path }}/9.png){: .shadow .rounded-10}<br>
+분명 이 포스터를 작성할때는 이러한 문제가 발생하지는 않았습니다. 하지만 지금은 `GitHub Actions`의 `Repository Variables`에 올려둔 변수를 제대로 인식 못하고 있는 모습인데요. 그래서 제가 기존에 올려둔 방식이 아니라 `메타태그`를 그대로 `_config.yml`에 입력하는 방법으로 수정하도록 하겠습니다.
+{: .prompt-danger}
 
 > 만약에, 벌써 `메타태그`가 기록되어 있는 소스코드를 업로드 하셨다면 [[Git] BFG로 Commit log 삭제](../git-bfg-1)를 참고하여 `Commit log`를 삭제해주세요.
 {: .prompt-info }
@@ -146,17 +149,26 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}{% endraw %}
 3. `권장 확인 방법`에 표시한대로 `HTML` 파일을 `root`에 다운로드 시켜도 되지만, 저는 `HTML 태그`를 사용해서 소유권 확인을 해보도록 하겠습니다. 아래의 그림대로 `메타태그`를 복사합니다.
 ![3]({{ page.img_path }}/3.png){: width="400" .shadow .rounded-10}
 
-4. 복사한 `메타태그`를 `_config.yml`에 입력해야 합니다. 하지만, `메타태그`를 그대로 `_config.yml`에 입력하면 추후 `GitHub`에 업로드하면서 `메타태그`가 노출됩니다. 이를 방지하기 위해서 `GitHub Actions`의 `Repository Variables`를 등록해주도록 하겠습니다.<br>
-아래의 그림의 순서대로 **Settings>Secrets and variables>Actions>Variables>New repository variable**를 클릭합니다.
-![3_1]({{ page.img_path }}/3_1.png){: .shadow .rounded-10}
-이후 아래와 같이 입력하여 `메타태그`를 `Repository Variables`에 등록합니다.
-![3_2]({{ page.img_path }}/3_2.png){: .shadow .rounded-10}
+4. ~~복사한 `메타태그`를 `_config.yml`에 입력해야 합니다. 하지만, `메타태그`를 그대로 `_config.yml`에 입력하면 추후 `GitHub`에 업로드하면서 `메타태그`가 노출됩니다. 이를 방지하기 위해서 `GitHub Actions`의 `Repository Variables`를 등록해주도록 하겠습니다.<br>
+아래의 그림의 순서대로 **Settings>Secrets and variables>Actions>Variables>New repository variable**를 클릭합니다.~~
 
-5. `Repository Variables`를 `_config.yml`에서 사용할 수 있도록 `vars` 컨텍스트를 사용합니다. `_config.yml`의 `webmaster_verifications` 항목에서 `google:`에 `${% raw %}{{ vars.GOOGLE_VERIFICATION }}{% endraw %}`를 아래와 같이 입력합니다.
+	![3_1]({{ page.img_path }}/3_1.png){: .shadow .rounded-10}
+
+	~~이후 아래와 같이 입력하여 `메타태그`를 `Repository Variables`에 등록합니다.~~
+
+	![3_2]({{ page.img_path }}/3_2.png){: .shadow .rounded-10}
+
+5. ~~`Repository Variables`를 `_config.yml`에서 사용할 수 있도록 `vars` 컨텍스트를 사용합니다. `_config.yml`의 `webmaster_verifications` 항목에서 `google:`에 `${% raw %}{{ vars.GOOGLE_VERIFICATION }}{% endraw %}`를 아래와 같이 입력합니다.~~<br>
+`_config.yml`의 `webmaster_verifications` 항목에서 `google:`에 `3번 순서`에서 획득한 `메타태그`를 아래와 같이 입력합니다.
 	```yaml
 	{% raw %}# Site Verification Settings
 	webmaster_verifications:
-		google: ${{ vars.GOOGLE_VERIFICATION }}
+		google: <메타태그> # <메타태그>는 3번 순서에서 복사한 메타태그의 Content 부분입니다. 
+		# 예를 들어, 복사한 메타태그가 <meta name="google-site-verification" conetent="ABCDE" />라고 하면, 
+		# ABCDE를 <메타태그> 대신에 입력하시면 됩니다.
+		# 이전에는 ${{ vars.GOOGLE_VERIFICATION }}를 입력하여, 
+		# GitHub Actions의 Repository Variables를 적극적으로 사용했지만 
+		# 이제 제대로 작동을 안 해서 ${{ vars.GOOGLE_VERIFICATION }}를 사용하지 않겠습니다.
 		bing: # fill in your Bing verification code
 		alexa: # fill in your Alexa verification code
 		yandex: # fill in your Yandex verification code
