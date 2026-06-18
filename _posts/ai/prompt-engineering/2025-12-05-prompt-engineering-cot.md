@@ -22,10 +22,13 @@ image:
 ---
 **예시)**
 
+---
+
 **Q: 철수는 사과를 3개 들고 있었고, 민수가 2개 더 주었다. 철수는 사과를 총 몇 개 갖게 되는가?**
 
 **A: 5개**
 
+---
 ---
 
 위의 질문에서 `3 + 2`를 하라는 지시는 없었지만, 인간은 쉽게 `더하기`를 해야겠다는 생각을 합니다. 이러한 추론 능력이 바로 `Arithmetic Reasoning`입니다. 하지만, `LLM`은 이러한 `Arithmetic Reasoning` 능력이 부족합니다.
@@ -38,10 +41,13 @@ image:
 ---
 **예시)**
 
+---
+
 **Q: 철수는 운동을 마친 후 옷이 땀으로 흠뻑 젖었다. 철수가 가장 먼저 할 일은 무엇일까?**
 
 **A: 옷을 갈아입는다.**
 
+---
 ---
 
 위의 질문에서는 `옷을 갈아입는다.`라는 문장이 없습니다. 하지만, 일상적인 상식과 경험이 있다면 `옷이 땀으로 흠뻑 젖었다.`→`옷을 갈아입는다.`가 자연스럽게 답변으로 `Commonsense Reasoning`가 됩니다. `LLM`에서는 이러한 비직접적 정보 추론이 어렵기 때문에 `CoT`를 사용합니다.
@@ -54,10 +60,13 @@ image:
 ---
 **예시)**
 
+---
+
 **Q: 만약 A → B이고, B → C이면, A → ?**
 
 **A: C**
 
+---
 ---
 
 위의 질문에서는 `→`와 같은 논리 도식을 사용했습니다. 우리와 같은 인간은 `→`를 `~가 ~이다.`로 약속해서 사용하고 있기 때문에 규칙 찾기, 논리 도식 등에서 `Symbolic Reasoning`을 사용할 수 있습니다. 하지만, `LLM`에게는 어려운 추론이기 때문에 `CoT`로 도와준다고 생각하시면 되겠습니다.
@@ -146,6 +155,8 @@ image:
 	---
 	**벤치 마크 GSM8K 예시)**
 
+	---
+
 	Q:
 	: Josh decides to try flipping a house. He buys a house for $80,000 and then puts
 	in $50,000 in repairs. This increased the value of the house by 150%. How
@@ -154,6 +165,7 @@ image:
 	번역:
 	: Josh는 주택 재테크를 시도해 보기로 결심합니다. 그는 집을 $80,000에 구입한 후, $50,000을 들여 수리를 합니다. 이로 인해 집의 가치는 150% 증가합니다. Josh는 얼마의 이익을 얻게 되었을까요?
 
+	---
 	---
 	
 - **표준 Prompting**
@@ -256,30 +268,46 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 
 2. **Variable Compute Only**
 - 실험 이유
-: `CoT prompting`이 효과적이라고 추정되는 이유 중 다른 하나는 **"`Reasoning` 과정 자체가 아니라, 모델이 더 많은 토큰을 생성하면서 더 많은 계산을 수행할 수 있기 때문이 아닐까?"**입니다. 그래서 이를 검증하기 위해서 `Variable Compute Only`를 실험했다고 합니다.
+: `CoT prompting`이 효과적이라고 추정되는 이유 중 다른 하나는 **"어려운 문제에서 모델이 더 많은 계산(중간 단계 토큰 등)을 수행할 수 있기 때문이 아닐까?"**입니다. 그래서 이를 검증하기 위해서 `Variable Compute Only`를 실험했다고 합니다.
+- 실험 조건
+: `CoT`의 `Reasoning`으로 발생하는 `Variable Computation(변수 계산)`의 효과만 분리하기 위해서, 문제를 해결하는 데 필요한 수식 길이만큼 마침표(.)만 출력하도록 설정했습니다.
+- 실험 결과
+: 이 방식은 기본 `Baseline(정석적인 CoT를 의미)`과 거의 동일한 성능을 보였다고 합니다. 이 실험이 의미하는 것은 `Variable Computation`으로는 `CoT`의 성능 향상을 설명할 수 없다는 뜻입니다. 즉, 자연어로 중간 사고 과정를 표현하면서 성능 향상이 발생한다는 것을 의미합니다.
 
+	---
 
-CoT에서는 중간 추론 문장을 생성하므로 출력 토큰 수가 늘어난다. 따라서 모델이 어려운 문제에 대해 더 많은 계산 자원을 사용할 수 있게 된다는 설명이 가능하다.
+	**CoT의 Variable Compute Only 실험 예시)**
+	
+	---
 
-연구진은 이 효과를 CoT의 추론 효과와 분리하기 위해 특수한 실험을 수행하였다.
+	**Model Input(공통사항)**
+	**Q:**
+	: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?
 
-모델에게 추론 문장을 생성하게 하지 않고, 대신 문제를 해결하는 데 필요한 수식 길이만큼 마침표(.)만 출력하도록 한 것이다.
+	**A:**
+	: Roger started with 5 balls. 2 cans of 3 tennis balls each is 6 tennis balls. 5 + 6 = 11. The answer is 11.
 
-예를 들어,
+	**Q:**
+	: The cafeteria had 23 apples. If they used 20 to make lunch and bought 6 more, how many apples do they have?
 
-..............
+	**Model Output**
 
-와 같은 형태의 출력만 생성하게 하여, 토큰 수는 CoT와 비슷하게 유지하되 실제 추론 내용은 제거하였다.
+	1. 기본 CoT를 사용했을때,
+	**Q:**
+	: The cafeteria had 23 apples originally. They used 20 to make lunch. So they had 23 - 20 = 3. They bought 6 more apples, so they have 3 + 6 = 9. The answer is 9.
 
-실험 결과 이 방식은 기본 프롬프팅(Standard Prompting)과 거의 동일한 성능을 보였다.
+	2. CoT의 Variable Compute Only일 때,<br>(중간 단계를 마침표로 작성하도록 prompting으로 설정)
+	**Q:**
+	: ............................................................................................................................. The answer is 9.
+	
+	**결론**
+	: 1번 결과와 2번 결과의 성능 차이가 없었기 때문에, **Variable Computation으로는 CoT의 성능 향상을 설명할 수 없다**라는 결론이 나왔다고 합니다.
 
-이는 단순히 계산량이나 출력 토큰 수가 증가하는 것만으로는 CoT의 성능 향상을 설명할 수 없음을 의미한다.
+	---
 
-즉,
+	---
 
-CoT의 효과는 "더 오래 생각해서"가 아니라, 자연어로 중간 추론 단계를 표현하는 과정 자체에서 비롯된다는 증거로 해석된다.
-
-3. Chain of Thought After Answer
+3. **Chain of Thought After Answer**
 - CoT의 또 다른 가능성 있는 설명은 다음과 같다.
 
 CoT 프롬프트가 모델이 사전학습(pretraining) 과정에서 습득한 관련 지식을 더 잘 불러오도록 도와주는 것일 뿐 아닐까?
