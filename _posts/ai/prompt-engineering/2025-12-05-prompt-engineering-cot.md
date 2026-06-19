@@ -20,7 +20,7 @@ image:
 예시를 확인하면 좀 더 이해하기 쉬울 겁니다.
 
 ---
-**예시)**
+**예시**
 
 ---
 
@@ -28,7 +28,6 @@ image:
 
 **A: 5개**
 
----
 ---
 
 위의 질문에서 `3 + 2`를 하라는 지시는 없었지만, 인간은 쉽게 `더하기`를 해야겠다는 생각을 합니다. 이러한 추론 능력이 바로 `Arithmetic Reasoning`입니다. 하지만, `LLM`은 이러한 `Arithmetic Reasoning` 능력이 부족합니다.
@@ -39,7 +38,7 @@ image:
 예시를 확인하면 좀 더 이해하기 쉬울 겁니다.
 
 ---
-**예시)**
+**예시**
 
 ---
 
@@ -47,7 +46,6 @@ image:
 
 **A: 옷을 갈아입는다.**
 
----
 ---
 
 위의 질문에서는 `옷을 갈아입는다.`라는 문장이 없습니다. 하지만, 일상적인 상식과 경험이 있다면 `옷이 땀으로 흠뻑 젖었다.`→`옷을 갈아입는다.`가 자연스럽게 답변으로 `Commonsense Reasoning`가 됩니다. `LLM`에서는 이러한 비직접적 정보 추론이 어렵기 때문에 `CoT`를 사용합니다.
@@ -58,7 +56,7 @@ image:
 예시를 확인하면 좀 더 이해하기 쉬울 겁니다.
 
 ---
-**예시)**
+**예시**
 
 ---
 
@@ -66,7 +64,6 @@ image:
 
 **A: C**
 
----
 ---
 
 위의 질문에서는 `→`와 같은 논리 도식을 사용했습니다. 우리와 같은 인간은 `→`를 `~가 ~이다.`로 약속해서 사용하고 있기 때문에 규칙 찾기, 논리 도식 등에서 `Symbolic Reasoning`을 사용할 수 있습니다. 하지만, `LLM`에게는 어려운 추론이기 때문에 `CoT`로 도와준다고 생각하시면 되겠습니다.
@@ -153,7 +150,7 @@ image:
 	: 다양한 출처에서 수집된 수학 문제입니다.
 	
 	---
-	**벤치 마크 GSM8K 예시)**
+	**벤치 마크 GSM8K 예시**
 
 	---
 
@@ -165,7 +162,6 @@ image:
 	번역:
 	: Josh는 주택 재테크를 시도해 보기로 결심합니다. 그는 집을 $80,000에 구입한 후, $50,000을 들여 수리를 합니다. 이로 인해 집의 가치는 150% 증가합니다. Josh는 얼마의 이익을 얻게 되었을까요?
 
-	---
 	---
 	
 - **표준 Prompting**
@@ -272,42 +268,48 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 - 실험 조건
 : `CoT`의 `Reasoning`으로 발생하는 `Variable Computation(변수 계산)`의 효과만 분리하기 위해서, 문제를 해결하는 데 필요한 수식 길이만큼 마침표(.)만 출력하도록 설정했습니다.
 - 실험 결과
-: 이 방식은 기본 `Baseline(정석적인 CoT를 의미)`과 거의 동일한 성능을 보였다고 합니다. 이 실험이 의미하는 것은 `Variable Computation`으로는 `CoT`의 성능 향상을 설명할 수 없다는 뜻입니다. 즉, 자연어로 중간 사고 과정를 표현하면서 성능 향상이 발생한다는 것을 의미합니다.
-
-	---
-
-	**CoT의 Variable Compute Only 실험 예시)**
-	
-	---
-
-	**Model Input(공통사항)**
-	**Q:**
-	: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?
-
-	**A:**
-	: Roger started with 5 balls. 2 cans of 3 tennis balls each is 6 tennis balls. 5 + 6 = 11. The answer is 11.
-
-	**Q:**
-	: The cafeteria had 23 apples. If they used 20 to make lunch and bought 6 more, how many apples do they have?
-
-	**Model Output**
-
-	1. 기본 CoT를 사용했을때,
-	**Q:**
-	: The cafeteria had 23 apples originally. They used 20 to make lunch. So they had 23 - 20 = 3. They bought 6 more apples, so they have 3 + 6 = 9. The answer is 9.
-
-	2. CoT의 Variable Compute Only일 때,<br>(중간 단계를 마침표로 작성하도록 prompting으로 설정)
-	**Q:**
-	: ............................................................................................................................. The answer is 9.
-	
-	**결론**
-	: 1번 결과와 2번 결과의 성능 차이가 없었기 때문에, **Variable Computation으로는 CoT의 성능 향상을 설명할 수 없다**라는 결론이 나왔다고 합니다.
-
-	---
-
-	---
+: 이 방식은 기본 `Baseline(Standard Prompting)`과 거의 동일한 성능을 보였다고 합니다. 이 실험이 의미하는 것은 `Variable Computation`으로는 `CoT`의 성능 향상을 설명할 수 없다는 뜻입니다. 즉, 자연어로 중간 사고 과정를 표현하면서 성능 향상이 발생한다는 것을 의미합니다.
+- 예시
+: 이 실험에 대해서 조금 더 이해하기 위해서 아래와 같은 예시를 따로 준비해봤습니다. 먼저, `Baseline`인 `Standard Prompting`의 방식에 대해서 예시를 들도록 하겠습니다.
+: ---
+: **Standard Prompting 실험 예시**
+: ---
+: **Model Input**
+: **Q:**
+: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?
+: **Model Output**
+: **A:**
+: The answer is 9.
+: ---
+: 명확합니다. 이 `Standard Prompting` 방식은 `CoT`를 사용하지 않아서 `Variable Computation`의 기준이 된다고 생각하시면 되겠습니다. 그럼 `CoT`의 `Variable Computation`만 늘려주려면 어떻게 해야할까요? 아래의 예시로 설명하겠습니다.
+: ---
+: **Variable Compute Only 실험 예시**
+: ---
+: **Model Input**
+: **Q:**
+: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?
+: **A:**
+: Roger started with 5 balls. 2 cans of 3 tennis balls each is 6 tennis balls. 5 + 6 = 11. The answer is 11.
+: **Q:**
+: The cafeteria had 23 apples. If they used 20 to make lunch and bought 6 more, how many apples do they have?
+: **Model Output**
+: **A:**
+: ............................................................................................................................. The answer is 9.
+: ---
+: `Model Input`은 `CoT` 방식으로 작성이 되었습니다. 하지만 `Model Output`에서 특별한 `Prompting` 설정이 있습니다. 원래 정상적인 `CoT`라면 대답이 아래와 같이 작성이 되었어야 합니다.
+: ---
+: **Model Output**
+: **A:**
+: The cafeteria had 23 apples originally. They used 20 to make lunch. So they had 23 - 20 = 3. They bought 6 more apples, so they have 3 + 6 = 9. The answer is 9.
+: ---
+: 즉, 특별한 `Prompting` 설정은 `The answer is 9.`이라는 정답 앞의 내용들을 정상적인 `CoT`의 답변의 길이만큼 전부 마침표로 출력하도록 한 것입니다.
+: 이런 특별한 `Prompting` 설정을 통해서 자연어로 구성된 중간 사고 과정을 제거하고 오직 `Variable Computation`만 늘려줬다고 볼 수 있습니다.
+: 결론적으로 본 논문에서는 이러한 특별한 `Prompting` 설정을 한 `Variable Compute Only`와 `Standard Prompting`를 비교했을 때, 큰 성능 차이가 없었다는 점을 입증했다고 합니다.
 
 3. **Chain of Thought After Answer**
+- 실험 이유
+: 
+
 - CoT의 또 다른 가능성 있는 설명은 다음과 같다.
 
 CoT 프롬프트가 모델이 사전학습(pretraining) 과정에서 습득한 관련 지식을 더 잘 불러오도록 도와주는 것일 뿐 아닐까?
