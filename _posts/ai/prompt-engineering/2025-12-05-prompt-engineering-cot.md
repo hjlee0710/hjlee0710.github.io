@@ -89,7 +89,7 @@ image:
 - **참고.** 최종 답에 도달하기까지의 자연어 기반 풀이 과정(`Rationales`) ≈  자연어 기반 중간 사고 과정(`Intermediate Steps`)
 
 2. `LLM`은 `Prompting`을 이용한 `In-Context Few-Shot Learning`이 유망하다는 점
-: - 즉, 새로운 작업마다 별도의 언어 모델을 `Fine-Tuning`하는 것보다 입력–출력 예시 몇 개(`Few Shot`)만 `Prompt`에 포함(`In-Context`)시키는 것만으로도 모델에게 작업을 알려줄 수 있는 것입니다.
+: - 즉, 새로운 작업마다 별도의 언어 모델을 `Fine-Tuning`하는 것보다 입력–출력 예시 몇 개(`Few-Shot`)만 `Prompt`에 포함(`In-Context`)시키는 것만으로도 모델에게 작업을 알려줄 수 있는 것입니다.
 - 해당 방식은 이미 [`"Language models are few-shot learners"(NeurIPS, 2020년)`](https://papers.nips.cc/paper_files/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html) 논문에서 입증이 되었습니다.
 
 하지만, 위의 두가지 아이디어에는 큰 한계점이 있다고 합니다.
@@ -173,6 +173,7 @@ image:
 : `CoT Prompting`에서 가장 중요한 것은 사고 과정(`CoT`)을 포함시키는 것입니다. 기존 벤치마크는`CoT`가 없고 오직 질문과 답만 있기 때문에, 해당 논문에서는 총 8개의 `Few-Shot 예시`에 맞는  `CoT`를 수작업으로 구성했습니다. 아래의 그림과 같은 8개의 동일한 `CoT` 예시 집합을 `AQuA`를 제외한 모든 벤치마크에서 사용했다고 합니다.
 	
 	![3]({{ page.img_path }}/3.png){: .shadow .rounded-10}
+	_`Few-Shot` 예시를 표현한 `Table 20`_
 	
 > `AQuA` 벤치마크는 [앞서 말했듯이](#실험-환경) 객관식으로 구성되어 있기 때문에, 위의 `CoT` 예시 집합은 `AQuA` 벤치마크에서 사용하지 못합니다. 대신에, `AQuA` 벤치마크에서는 해당 벤치마크에서 4개의 `Few-Shot 예시`를 뽑아내고 이에 맞는 `CoT`를 직접 작성해줬다고 합니다. 해당 예시는 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 21`를 읽어보시면 되겠습니다.
 {: .prompt-info}
@@ -281,7 +282,7 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 : **A:**
 : The answer is 9.
 : ---
-: 명확합니다. 이 `Standard Prompting` 방식은 `CoT`를 사용하지 않아서 `Variable Computation`의 기준이 된다고 생각하시면 되겠습니다. 그럼 `CoT`의 `Variable Computation`만 늘려주려면 어떻게 해야할까요? 아래의 예시로 설명하겠습니다.
+: `Standard Prompting 실험 예시`는 명확합니다. 이 `Standard Prompting` 방식은 `CoT`를 사용하지 않아서 `Variable Computation`의 기준이 된다고 생각하시면 되겠습니다. 그럼 `CoT`의 `Variable Computation`만 늘려주려면 어떻게 해야할까요? 아래의 예시로 설명하겠습니다.
 : ---
 : **Variable Compute Only 실험 예시**
 : ---
@@ -296,7 +297,7 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 : **A:**
 : ............................................................................................................................. The answer is 9.
 : ---
-: `Model Input`은 `CoT` 방식으로 작성이 되었습니다. 하지만 `Model Output`에서 특별한 `Prompting` 설정이 있습니다. 원래 정상적인 `CoT`라면 대답이 아래와 같이 작성이 되었어야 합니다.
+: `Variable Compute Only 실험 예시`에서 `Model Input`은 `CoT` 방식으로 작성이 되었습니다. 하지만 `Model Output`에서 특별한 `Prompting` 설정이 있습니다. 원래 정상적인 `CoT`라면 대답이 아래와 같이 작성이 되었어야 합니다.
 : ---
 : **Model Output**
 : **A:**
@@ -308,33 +309,14 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 
 3. **Chain of Thought After Answer**
 - 실험 이유
-: 
+: `CoT prompting`이 효과적이라고 추정되는 이유 중 마지막 하나는 **"CoT 프롬프트가 모델이 사전학습(pretraining) 과정에서 습득한 관련 지식을 더 잘 불러오도록 도와주는 것일 뿐 아닐까?"**입니다.
+- 실험 조건
+: 모델이 먼저 정답을 출력한 뒤, 그 다음에 `CoT` 형태의 추론을 생성하도록 프롬프트를 구성했다고 합니다. 이를 통해 최종 정답을 도출할 때, 생성된 `CoT`에 실제로 의지하는지 여부를 확인했다고 합니다.
+- 실험 결과
+: 이 방식도 기본 `Baseline(Standard Prompting)`과 거의 동일한 성능을 보였다고 합니다. 이 실험이 의미하는 것은 `CoT` 안에 포함된 순차적 추론 과정이 단순히 지식을 활성화 하는 것 이상의 이유에서 유용하다는 것을 시사합니다.
 
-- CoT의 또 다른 가능성 있는 설명은 다음과 같다.
-
-CoT 프롬프트가 모델이 사전학습(pretraining) 과정에서 습득한 관련 지식을 더 잘 불러오도록 도와주는 것일 뿐 아닐까?
-
-만약 그렇다면 추론 과정이 실제로 답을 구하는 데 필요하지 않을 수도 있다.
-
-이를 검증하기 위해 연구진은 특이한 설정을 실험하였다.
-
-모델이 먼저 정답을 출력한 뒤,
-
-그 다음에 CoT 형태의 추론을 생성하도록 프롬프트를 구성한 것이다.
-
-즉,
-
-정답 → 추론
-
-순서로 출력하게 하여,
-
-실제로 최종 답을 생성할 때 CoT를 활용하는지 여부를 분리해서 측정하였다.
-
-실험 결과 이 방식 역시 기본 프롬프팅과 거의 동일한 성능을 보였다.
-
-이는 CoT의 효과가 단순히 관련 지식을 활성화(knowledge activation)시키는 데서 오는 것이 아니라는 점을 시사한다.
-
-오히려 CoT 안에 포함된 순차적(sequential) 추론 과정 자체가 최종 답변을 생성하는 데 실질적인 역할을 한다는 것을 보여준다.
+#### **Robustness of Chain of Thought**
+`Prompting` 기반 접근법에서 예시에 대한 `민감성(Sensitivity)`은 중요한 고려 사항이라고 합니다. 예를 들어, `Few-Shot` 예시의 순서만 바꾸더라도 `GPT-3`의 `SST-2` 정확도가 거의 무작위 수준인 54.3%부터 `SOTA`에 가까운 93.4%까지 달라질 수 있다는 연구 결과가 있었습니다. 해당 연구결과는 [`"Calibrate before use: Improving few-shot performance of language models"(ICML, 2021)`](https://arxiv.org/abs/2102.09690) 논문을 참고하시면 좋겠습니다.
 
 ### **Commonsense Reasoning 측정**
 
