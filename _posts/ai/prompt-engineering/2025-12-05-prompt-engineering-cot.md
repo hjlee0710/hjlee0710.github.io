@@ -316,7 +316,44 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 : 이 방식도 기본 `Baseline(Standard Prompting)`과 거의 동일한 성능을 보였다고 합니다. 이 실험이 의미하는 것은 `CoT` 안에 포함된 순차적 추론 과정이 단순히 지식을 활성화 하는 것 이상의 이유에서 유용하다는 것을 시사합니다.
 
 #### **Robustness of Chain of Thought**
-`Prompting` 기반 접근법에서 예시에 대한 `민감성(Sensitivity)`은 중요한 고려 사항이라고 합니다. 예를 들어, `Few-Shot` 예시의 순서만 바꾸더라도 `GPT-3`의 `SST-2` 정확도가 거의 무작위 수준인 54.3%부터 `SOTA`에 가까운 93.4%까지 달라질 수 있다는 연구 결과가 있었습니다. 해당 연구결과는 [`"Calibrate before use: Improving few-shot performance of language models"(ICML, 2021)`](https://arxiv.org/abs/2102.09690) 논문을 참고하시면 좋겠습니다.
+`Prompting` 기반 접근법에서 예시에 대한 `민감성(Sensitivity)`은 중요한 고려 사항이라고 합니다. 예를 들어, `Few-Shot` 예시의 순서만 바꾸더라도 `GPT-3`의 `SST-2` 정확도가 거의 무작위 수준인 54.3%부터 `SOTA`에 가까운 93.4%까지 달라질 수 있다는 연구 결과가 있었습니다. 해당 연구결과는 [`"Calibrate before use: Improving few-shot performance of language models"(ICML, 2021)`](https://arxiv.org/abs/2102.09690) 논문을 참고하시면 좋겠습니다.<br><br>
+그래서 이번 항목에서는 서로 다른 `작성자(Annotator)`가 작성한 `CoT`에 대해서도 성능이 얼마나 `견고(Robust)`한지를 평가합니다. 앞서 다뤘던 해당 논문의 실험들은 `Annotator A`가 작성한 `CoT`[(`실험 환경`의 `CoT Prompting`에서 다룬 `Table 20`의 `Few-Shot` 예시들)](#실험-환경)를 사용했다고 합니다. 이에 더해, 이 논문의 공동 저자 두 명(`Annotator B`와 `Annotator C`)이 동일한 `Few-shot` 예시들에 대해 서로 독립적으로 `CoT`를 작성했다고 합니다. [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix H`를 참고해주시면 됩니다. 아래의 그림은 `Annotator`들이 작성한 `CoT`들을 비교한 것입니다.
+
+![7]({{ page.img_path }}/7.png){: .shadow .rounded-10}
+_`Annotator A, B, C`를 비교(`Appendix H`에서 참고)_
+
+그리고 이 논문에서는 `Annotator A, B, C`의 `Few-shot` 예시 뿐만 아니라, 추가적으로 `Annotator A`를 [`"Training verifiers to solve math word problems."(Arxiv, 2021)`](https://arxiv.org/abs/2110.14168) 논문의 풀이 스타일을 참고하여 기존보다 더 간결한 `CoT`도 별도로 작성했다고 합니다. 아래의 예시를 참고하시면 될 것 같습니다.
+
+---
+**Annotator A의 기존 및 간결한 CoT 예시**
+
+---
+
+- 기존 CoT 예시
+: There were originally 9 computers. For each of 4 days, 5 more computers were added. So 5 * 4 = 20 computers were added. 9 + 20 is 29.
+- 간결한 CoT 예시
+: 5 * 4 = 20 new computers were added. So there are 9 + 20 = 29 new computers in the server room now.
+
+---
+
+위의 예시에서 볼 수 있듯이 간결한 `CoT`는 자잘한 설명 없이 `5 * 4 = 20`와 `9 + 20 = 29` 같은 수식을 중점적으로 다뤘습니다. 
+
+> **[`"Training verifiers to solve math word problems."(Arxiv, 2021)`](https://arxiv.org/abs/2110.14168) 논문에 대한 간단한 설명**<br>
+> 해당 논문에서 다룬 모델들이 산술 계산에서 오류가 자주 발생했다고 합니다. 그래서 이를 보완하기 위해서 학습 데이터에 `<<4 * 2 = 8>>`과 같은 계산 주석을 아래와 같이 삽입하여 모델들이 계산기를 사용할 수 있도록 했다고 합니다. 빨간 글씨에다 `<<>>`로 기록해 놓은 것이 계산 주석입니다.
+> ![8]({{ page.img_path }}/8.png){: .shadow}
+{: .prompt-info}
+
+이제, `LaMDA 137B`에서 `GSM8K`와 `MAWPS` 데이터셋에 `Annotator A, B, C`가 작성한 `CoT`와 간결한 `CoT` 등을 활용하여 실험한 결과를 살펴보도록 하겠습니다. 실험 결과는 아래의 `Figure 6`와 같습니다. 추가적으로 다른 데이터셋에 대한 `Ablation Study`와 `Robustness` 실험 결과는 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 6, Table 7`에 제시되어 되어 있으니 참고해주세요.
+
+![9]({{ page.img_path }}/9.png){: .shadow .rounded-10}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 6`_
+
+
+예상했던 것처럼, 예시 기반 프롬프팅(exemplar-based prompting)에서는 서로 다른 Chain of Thought 작성 방식에 따라 일정한 성능 차이(variance)가 존재하였다(Le Scao and Rush, 2021; Reynolds and McDonell, 2021; Zhao et al., 2021).
+
+그러나 모든 Chain of Thought 프롬프트는 Standard Prompting보다 큰 폭으로 더 좋은 성능을 보였다.
+
+이 결과는 Chain of Thought를 성공적으로 활용하기 위해 특정한 언어적 표현 방식(linguistic style)에 의존할 필요는 없다는 점을 시사한다.
 
 ### **Commonsense Reasoning 측정**
 
