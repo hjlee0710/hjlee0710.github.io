@@ -322,7 +322,7 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 ![7]({{ page.img_path }}/7.png){: .shadow .rounded-10}
 _`Annotator A, B, C`를 비교(`Appendix H`에서 참고)_
 
-그리고 이 논문에서는 `Annotator A, B, C`의 `Few-shot` 예시 뿐만 아니라, 추가적으로 `Annotator A`를 [`"Training verifiers to solve math word problems."(Arxiv, 2021)`](https://arxiv.org/abs/2110.14168) 논문의 풀이 스타일을 참고하여 기존보다 더 간결한 `CoT`도 별도로 작성했다고 합니다. 아래의 예시를 참고하시면 될 것 같습니다.
+그리고 이 논문에서는 `Annotator A, B, C`의 `Few-shot` 예시 뿐만 아니라, 추가적으로 `Annotator A`를 [`"Training verifiers to solve math word problems."(Arxiv, 2021)(= GSM8K 데이터셋)`](https://arxiv.org/abs/2110.14168) 논문의 풀이 스타일을 참고하여 기존보다 더 간결한 `CoT`도 별도로 작성했다고 합니다. 아래의 예시를 참고하시면 될 것 같습니다.
 
 ---
 **Annotator A의 기존 및 간결한 CoT 예시**
@@ -338,9 +338,10 @@ _`Annotator A, B, C`를 비교(`Appendix H`에서 참고)_
 
 위의 예시에서 볼 수 있듯이 간결한 `CoT`는 자잘한 설명 없이 `5 * 4 = 20`와 `9 + 20 = 29` 같은 수식을 중점적으로 다뤘습니다. 
 
-> **[`"Training verifiers to solve math word problems."(Arxiv, 2021)`](https://arxiv.org/abs/2110.14168) 논문에 대한 간단한 설명**<br>
-> 해당 논문에서 다룬 모델들이 산술 계산에서 오류가 자주 발생했다고 합니다. 그래서 이를 보완하기 위해서 학습 데이터에 `<<4 * 2 = 8>>`과 같은 계산 주석을 아래와 같이 삽입하여 모델들이 계산기를 사용할 수 있도록 했다고 합니다. 빨간 글씨에다 `<<>>`로 기록해 놓은 것이 계산 주석입니다.
+> **[`"Training verifiers to solve math word problems."(Arxiv, 2021)`](https://arxiv.org/abs/2110.14168) 논문의 간결한 CoT 예시 대한 간단한 설명**<br>
+> 해당 논문은 `GSM8K` 데이터셋에 대해서 설명하는 논문입니다. 아래의 그림을 보면 알 수 있듯이 `Solution`에서는 `<<4 * 2 = 8>>`과 같은 계산 주석을 아래와 같이 삽입하여 모델들이 계산기를 사용할 수 있도록 했다고 합니다. 이와 같은 작업을 한 이유는 해당 논문에서 다룬 모델들이 산술 계산에서 오류가 자주 발생했기 때문에 이를 보안하기 위해서 입니다. 이 포스팅에서 다루고 있는 [논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 이러한 수식 위주의 방법을 사용하여, 간결한 `CoT`를 작성했다고 생각하시면 되겠습니다.
 > ![8]({{ page.img_path }}/8.png){: .shadow}
+> _`GSM8K` 데이터셋 예시_
 {: .prompt-info}
 
 이제, `LaMDA 137B`에서 `GSM8K`와 `MAWPS` 데이터셋에 `Annotator A, B, C`가 작성한 `CoT`와 간결한 `CoT` 등을 활용하여 실험한 결과를 살펴보도록 하겠습니다. 실험 결과는 아래의 `Figure 6`와 같습니다. 추가적으로 다른 데이터셋에 대한 `Ablation Study`와 `Robustness` 실험 결과는 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 6, Table 7`에 제시되어 되어 있으니 참고해주세요.
@@ -348,12 +349,25 @@ _`Annotator A, B, C`를 비교(`Appendix H`에서 참고)_
 ![9]({{ page.img_path }}/9.png){: .shadow .rounded-10}
 _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 6`_
 
+`Figure 6`를 보면 알 수 있듯이, `예시 기반 프롬프팅(Exemplar-based Prompting)`에서는 서로 다른 `CoT` 작성 방식에 따라 `성능 차이(Variance)`가 있습니다. 하지만 모든 `CoT` 프롬프트는 `Standard Prompting`보다 큰 폭으로 좋은 성능을 보였습니다.<br>
+> **결론적으로 CoT는 특정한 언어적 표현 방식(Linguistic Style)에 의존할 필요가 없이 강건하다는 뜻입니다.**
 
-예상했던 것처럼, 예시 기반 프롬프팅(exemplar-based prompting)에서는 서로 다른 Chain of Thought 작성 방식에 따라 일정한 성능 차이(variance)가 존재하였다(Le Scao and Rush, 2021; Reynolds and McDonell, 2021; Zhao et al., 2021).
+> `예시 기반 프롬프팅(Exemplar-based Prompting)`는 앞서 다뤘던 `Few-shot Prompting`와 비슷하다고 생각하시면 되겠습니다.
+{: .prompt-info}
 
-그러나 모든 Chain of Thought 프롬프트는 Standard Prompting보다 큰 폭으로 더 좋은 성능을 보였다.
+또한 `CoT Prompting`이 다른 예시 집합에서도 잘 동작하는지 확인하기 위해 추가 실험도 실행했다고 합니다. `GSM8K` 데이터셋에서 8개의 예시를 무작위로 선택한 세 개의 서로 다른 예시 집합(`· exemplars from GSM8K (α, β, γ)`)을 사용하여 실험했습니다. `GSM8K` 데이터셋은 앞서 다뤘던 `GSM8K 데이터셋 예시` 그림을 보면 알 수 있듯이 `Solution`에서 `CoT`처럼 추론 단계를 포함하고 있습니다. 그래서 따로 `CoT`를 작성하지 않고 `GSM8K` 데이터셋의 예시들을 사용했을 때는 효과가 어떨지를 평가한 것입니다.
 
-이 결과는 Chain of Thought를 성공적으로 활용하기 위해 특정한 언어적 표현 방식(linguistic style)에 의존할 필요는 없다는 점을 시사한다.
+> **무작위로 선택한 세 개의 서로 다른 예시 집합 선정 방법**<br>
+> 입력 `컨텍스트 창(Context Window)`에 맞추기 위해 60 토큰 이하의 예시만 샘플링(따로 가공하지 않고 선별)했다고 합니다. 그리고 `Annotator`들이 직접 작성한 8개의 `Few-shot 예시`와 공정하게 비교하기 위해 해결 단계도 2단계 이하인 예시로 제한했다고 합니다. 이런 방식으로 예시를 샘플링한 것을 보면 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 명시하지 않았지만, `Annotator`들이 작성한 `Few-shot 예시`의 `CoT`는 2단계 이하로 작성했던 것 같습니다.
+{: .prompt-info}
+
+`Figure 6`에서 볼 수 있듯이, `· exemplars from GSM8K (α, β, γ)`의 실험 결과도 Annotator A, B, C`가 작성한 `CoT`와 비슷한 성능을 보였고 모두 Standard Prompting을 크게 능가했습니다.<br><br>
+
+마지막으로 산술 추론에서의 `CoT Prompting`이 다음과 같은 요소들에 대해서도 견고하다는 사실을 확인했다고 합니다.
+- 예시의 순서가 달라지는 경우
+- 사용하는 예시의 개수가 달라지는 경우
+
+이에 대한 자세한 결과는 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix A.2`를 참고하시면 될 것 같습니다.
 
 ### **Commonsense Reasoning 측정**
 
