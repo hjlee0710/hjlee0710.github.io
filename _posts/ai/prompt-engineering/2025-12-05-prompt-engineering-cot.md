@@ -370,7 +370,42 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 이에 대한 자세한 결과는 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix A.2`를 참고하시면 될 것 같습니다.
 
 ### **Commonsense Reasoning 측정**
+`CoT`는 [앞에서 다룬 것 처럼](#arithmetic-reasoning-측정) 수학 서술형 문제에 특히 적합하지만, `CoT`가 자연어 기반이라는 특성 덕분에 실제로는 더 광범위한 종류의 `Commonsense Reasoning(상식 추론)` 문제에도 적용할 수 있습니다. `Commonsense Reasoning` 문제는 일반적인 배경지식을 전제로 물리적 상호작용과 인간의 상호작용에 대해 추론하는 것을 포함합니다. `Commonsense Reasoning`는 세상과 상호작용하는 데 핵심적인 능력이지만, 현재의 자연어 이해 시스템으로는 여전히 해결하기 어려운 과제라고 합니다.
 
 #### **실험 환경**
+
+- **벤치 마크**
+: `CSQA`, `StrategyQA`, `BIG-bench(Date Understanding, Sports Understanding)`, `SayCan` 데이터셋을 사용했습니다.
+
+	- CSQA
+	: 사전 지식을 요구하는 복잡한 `의미(Semantics)`를 포함하는 세상에 대한 상식 질문을 제시합니다.
+
+	- StrategyQA
+	: 질문에 답하기 위해 `여러 단계에 걸친 추론 전략(Multi-hop Strategy)`을 도출할 것을 요구합니다.
+	
+	- BIG-bench
+	: 1. Date Understanding
+		: 주어진 문맥으로부터 날짜를 추론하는 과제입니다.
+	2. Sports Understanding
+		: 스포츠와 관련된 문장이 `그럴듯한지(Plausible)` 또는 `그럴듯하지 않은지(Implausible)`를 판단하는 과제입니다.
+		
+	- SayCan
+	: 자연어 명령을 `유한한 선택지 집합(Discrete Set)`으로부터 로봇 행동들의 순서로 매핑하는 과제입니다.
+	
+
+	---
+	**Commonsense Reasoning 예시들**
+
+	---
+
+	![10]({{ page.img_path }}/10.png){: .shadow}
+	_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 3` 중 `Commonsense Reasoning` 예시_
+	
+	위의 그림에서 노란색으로 하이라이트 표시가 된 부분이 바로 `CoT`입니다.
+
+	---
+
+- **Prompts**
+: 앞선 [**"Arithmetic Reasoning 측정"**](#arithmetic-reasoning-측정)과 동일한 실험 환경을 따랐다고 합니다.
 
 #### **결과**
