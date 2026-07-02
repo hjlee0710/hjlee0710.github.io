@@ -209,13 +209,13 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 	- 위의 `Figure 4`를 보면 알 수 있듯이 `100B`보다 큰 규모의 모델에서는 `Emergent Ability`가 보입니다.
 	- 소형 모델들은 문법적으로는 유창하지만, 논리적으로 맞지 않는 `CoT`를 생성해 오히려 `Standard Prompting`보다 성능이 더 낮은 경우도 있다고 합니다.
 
-	> **`Emergent Ability`란?**
-	> <br>모델의 규모가 일정 수준을 넘었을 때, 이전에는 보이지 않던 새로운 능력이 갑자기 나타나는 현상입니다. 위의 `Figure 4`에서 `GPT`를 `GSM8K` 데이터셋으로 실험한 결과를 살펴봤을때, 규모(`scale`)가 7B일 때는 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 크게 나지 않습니다. 하지만 178B에서 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 확실하게 나오면서 `Emergent Ability`가 발생했다고 볼 수 있습니다. [`"Emergent Abilities of Large Language Models"`](https://arxiv.org/abs/2206.07682) 논문을 참고해주세요.
+	> `Emergent Ability`란?
+	> : 모델의 규모가 일정 수준을 넘었을 때, 이전에는 보이지 않던 새로운 능력이 갑자기 나타나는 현상입니다. 위의 `Figure 4`에서 `GPT`를 `GSM8K` 데이터셋으로 실험한 결과를 살펴봤을때, 규모(`scale`)가 7B일 때는 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 크게 나지 않습니다. 하지만 178B에서 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 확실하게 나오면서 `Emergent Ability`가 발생했다고 볼 수 있습니다. [`"Emergent Abilities of Large Language Models"`](https://arxiv.org/abs/2206.07682) 논문을 참고해주세요.
 	{: .prompt-info}
 
 2. **문제 난이도가 높을수록 CoT의 성능 향상이 더 큽니다.**
-	> **`데이테셋의 문제 난이도`란?**
-	> <br>문제 난이도는 위의 `Figure 4`의 `Standard prompting` 실험 결과로 판단합니다. `GSM8K` 데이터셋은 모델의 규모가 커져도 `solve rate`가 `20%`로 넘기지 못하며 크게 향상되지 않습니다. 반면에 `MAWPS` 데이터셋은 규모가 `100B`를 넘겼을때, `solve rate`가 크게 향상됩니다. 그래서 `GSM8K`은 비교적 문제의 난이도가 높다고 하고 `MAWPS`는 비교적 문제의 난이도가 낮다고 합니다.
+	> `데이테셋의 문제 난이도`란?
+	> : 문제 난이도는 위의 `Figure 4`의 `Standard prompting` 실험 결과로 판단합니다. `GSM8K` 데이터셋은 모델의 규모가 커져도 `solve rate`가 `20%`로 넘기지 못하며 크게 향상되지 않습니다. 반면에 `MAWPS` 데이터셋은 규모가 `100B`를 넘겼을때, `solve rate`가 크게 향상됩니다. 그래서 `GSM8K`은 비교적 문제의 난이도가 높다고 하고 `MAWPS`는 비교적 문제의 난이도가 낮다고 합니다.
 	{: .prompt-info}
 
 	- 위의 `Figure 4`를 살펴보면, `GSM8K` 데이터셋과 같이 난이도가 높은 문제에서는 `GPT` 및 `PaLM`과 같은 대형 모델에서 `CoT prompting`이 모델의 성능을 2배 이상 향상시킵니다.
@@ -338,8 +338,8 @@ _`Annotator A, B, C`를 비교(`Appendix H`에서 참고)_
 
 위의 예시에서 볼 수 있듯이 간결한 `CoT`는 자잘한 설명 없이 `5 * 4 = 20`와 `9 + 20 = 29` 같은 수식을 중점적으로 다뤘습니다. 
 
-> **[`"Training verifiers to solve math word problems."(Arxiv, 2021)`](https://arxiv.org/abs/2110.14168) 논문의 간결한 CoT 예시 대한 간단한 설명**<br>
-> 해당 논문은 `GSM8K` 데이터셋에 대해서 설명하는 논문입니다. 아래의 그림을 보면 알 수 있듯이 `Solution`에서는 `<<4 * 2 = 8>>`과 같은 계산 주석을 아래와 같이 삽입하여 모델들이 계산기를 사용할 수 있도록 했다고 합니다. 이와 같은 작업을 한 이유는 해당 논문에서 다룬 모델들이 산술 계산에서 오류가 자주 발생했기 때문에 이를 보안하기 위해서 입니다. 이 포스팅에서 다루고 있는 [논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 이러한 수식 위주의 방법을 사용하여, 간결한 `CoT`를 작성했다고 생각하시면 되겠습니다.
+> [`"Training verifiers to solve math word problems."(Arxiv, 2021)`](https://arxiv.org/abs/2110.14168) 논문의 간결한 CoT 예시 대한 간단한 설명
+> : 해당 논문은 `GSM8K` 데이터셋에 대해서 설명하는 논문입니다. 아래의 그림을 보면 알 수 있듯이 `Solution`에서는 `<<4 * 2 = 8>>`과 같은 계산 주석을 아래와 같이 삽입하여 모델들이 계산기를 사용할 수 있도록 했다고 합니다. 이와 같은 작업을 한 이유는 해당 논문에서 다룬 모델들이 산술 계산에서 오류가 자주 발생했기 때문에 이를 보안하기 위해서 입니다. 이 포스팅에서 다루고 있는 [논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 이러한 수식 위주의 방법을 사용하여, 간결한 `CoT`를 작성했다고 생각하시면 되겠습니다.
 > ![8]({{ page.img_path }}/8.png){: .shadow}
 > _`GSM8K` 데이터셋 예시_
 {: .prompt-info}
@@ -357,8 +357,8 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 
 또한 `CoT Prompting`이 다른 예시 집합에서도 잘 동작하는지 확인하기 위해 추가 실험도 실행했다고 합니다. `GSM8K` 데이터셋에서 8개의 예시를 무작위로 선택한 세 개의 서로 다른 예시 집합(`· exemplars from GSM8K (α, β, γ)`)을 사용하여 실험했습니다. `GSM8K` 데이터셋은 앞서 다뤘던 `GSM8K 데이터셋 예시` 그림을 보면 알 수 있듯이 `Solution`에서 `CoT`처럼 추론 단계를 포함하고 있습니다. 그래서 따로 `CoT`를 작성하지 않고 `GSM8K` 데이터셋의 예시들을 사용했을 때는 효과가 어떨지를 평가한 것입니다.
 
-> **무작위로 선택한 세 개의 서로 다른 예시 집합 선정 방법**<br>
-> 입력 `컨텍스트 창(Context Window)`에 맞추기 위해 60 토큰 이하의 예시만 샘플링(따로 가공하지 않고 선별)했다고 합니다. 그리고 `Annotator`들이 직접 작성한 8개의 `Few-shot 예시`와 공정하게 비교하기 위해 해결 단계도 2단계 이하인 예시로 제한했다고 합니다. 이런 방식으로 예시를 샘플링한 것을 보면 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 명시하지 않았지만, `Annotator`들이 작성한 `Few-shot 예시`의 `CoT`는 2단계 이하로 작성했던 것 같습니다.
+> 무작위로 선택한 세 개의 서로 다른 예시 집합 선정 방법
+> : 입력 `컨텍스트 창(Context Window)`에 맞추기 위해 60 토큰 이하의 예시만 샘플링(따로 가공하지 않고 선별)했다고 합니다. 그리고 `Annotator`들이 직접 작성한 8개의 `Few-shot 예시`와 공정하게 비교하기 위해 해결 단계도 2단계 이하인 예시로 제한했다고 합니다. 이런 방식으로 예시를 샘플링한 것을 보면 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 명시하지 않았지만, `Annotator`들이 작성한 `Few-shot 예시`의 `CoT`는 2단계 이하로 작성했던 것 같습니다.
 {: .prompt-info}
 
 `Figure 6`에서 볼 수 있듯이, `· exemplars from GSM8K (α, β, γ)`의 실험 결과도 Annotator A, B, C`가 작성한 `CoT`와 비슷한 성능을 보였고 모두 Standard Prompting을 크게 능가했습니다.<br><br>
@@ -406,6 +406,35 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 	---
 
 - **Prompts**
-: 앞선 [**"Arithmetic Reasoning 측정"**](#arithmetic-reasoning-측정)과 동일한 실험 환경을 따랐다고 합니다.
+: 앞선 [**"Arithmetic Reasoning 측정"**](#arithmetic-reasoning-측정)과 동일한 실험 환경을 따랐다고 합니다. `CSQA`와 `StrategyQA`의 경우에는 학습 데이터셋에서 예시들을 무작위로 선택한 뒤, 이를 `Few-shot` 예시로 사용하기 위해 `CoT`를 수작업으로 작성했다고 합니다. 두 개의 `BIG-bench` 데이터셋은 학습 데이터셋이 존재하지 않기 때문에, 평가 데이터셋의 처음 10개의 예시를 `Few-shot` 예시로 선택했고 나머지 평가 데이터셋으로 성능 결과를 측정했다고 합니다. 마지막으로 `SayCan`의 경우에는 [`"Do As I Can, Not As I Say: Grounding Language in Robotic Affordances(Arxiv, 2022)"`](https://arxiv.org/abs/2204.01691)에서 사용한 학습 데이터셋의 6개 예시를 사용하였으며, 이들에 대해서도 `CoT`를 수작업으로 작성했다고 합니다.
+
+	---
+	**SayCan 예시들**
+
+	---
+
+	![11]({{ page.img_path }}/11.png){: .shadow}
+	_[`"Do As I Can, Not As I Say: Grounding Language in Robotic Affordances(Arxiv, 2022)"`](https://arxiv.org/abs/2204.01691)의 `Table 4`_
+
+	위의 그림에서 하이라이트 표시가 된 부분이 바로 `CoT`입니다. 위의 예시에는 3개 밖에 없는데, 나머지는 [해당 논문](https://arxiv.org/abs/2204.01691)에서 찾아보시면 되겠습니다.
+
+	---
+
+#### **결과**
+![12]({{ page.img_path }}/12.png){: .shadow}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 7`_
+
+위의 `Figure 7`은 `LLM` 중의 하나인 `PaLM`으로 실험한 결과입니다. `PaLM` 이외에 `LaMDA`, `GPT-3` 및 다양한 모델 규모에 대한 전체 결과는 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Table 4`를 참고해주시기 바랍니다.
+
+모든 데이터셋에서 모델의 `크기를 확장(Scale Up)`할수록 `Standard Prompting`의 성능이 향상되었다고 합니다. 또한 `CoT Prompting`을 적용하면 성능이 더욱 향상되었으며, 이러한 성능 향상은 `PaLM 540B`에서 가장 크게 나타났습니다.
+
+실험 결과를 종합해보면, `CoT Prompting`을 적용한 `PaLM 540B`는 `Standard Prompting`과 비교하여 우수한 성능을 달성했습니다. 구체적으로 `StrategyQA` 데이터셋에서는 `SOTA`를 69.4%에서 75.6%로 뛰어넘었으며, `BIG-bench`의 `Sports Understanding`에서는 `보조 도구의 도움을 받지 않은 스포츠 애호가(Unaided Sports Enthusiast)`의 `Solve rate`인 84%보다 높은 성능인 95.4%를 보였다고 할 수 있습니다.
+
+> **결론적으로 CoT Prompting이 다양한 Commonsense Reasoning 능력을 요구하는 과제에서도 성능을 향상시킬 수 있음을 보여줍니다.** <br>
+> (다만 `CSQA`에서는 성능 향상이 매우 제한적이라는 점을 유의해야합니다.)
+
+### **Symbolic Reasoning 측정**
+
+#### **Tasks**
 
 #### **결과**
