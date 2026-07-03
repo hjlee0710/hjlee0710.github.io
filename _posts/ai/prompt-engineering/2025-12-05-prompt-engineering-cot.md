@@ -50,7 +50,7 @@ image:
 
 위의 질문에서는 `옷을 갈아입는다.`라는 문장이 없습니다. 하지만, 일상적인 상식과 경험이 있다면 `옷이 땀으로 흠뻑 젖었다.`→`옷을 갈아입는다.`가 자연스럽게 답변으로 `Commonsense Reasoning`가 됩니다. `LLM`에서는 이러한 비직접적 정보 추론이 어렵기 때문에 `CoT`를 사용합니다.
 
-### **Symbolic Reasoning(논리적 추론)**
+### **Symbolic Reasoning(형식적 추론)**
 > **수식, 기호, 규칙 등 기호 기반 규칙이나 패턴을 이해하고 적용하는 사고 능력입니다.**
 
 예시를 확인하면 좀 더 이해하기 쉬울 겁니다.
@@ -434,7 +434,57 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 > (다만 `CSQA`에서는 성능 향상이 매우 제한적이라는 점을 유의해야합니다.)
 
 ### **Symbolic Reasoning 측정**
+[이 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서 마지막으로 다루는 실험은 `Symbolic Reasoning(형식적 추론)`입니다. `Symbolic Reasoning`은 사람에게는 쉽지만, 언어 모델에게는 잠재적으로 어려운 과제일 수도 있다고 합니다. [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 `CoT Prompting`이 `Standard Prompting`으로는 수행하기 어려운 `Symbolic Reasoning` 과제를 `LM`이 수행할 수 있도록 할 뿐만 아니라, `Few-shot` 예시에서 보지 못했던 것보다 더 긴 `추론 시점(Inference-time)`의 입력에 대해서도 `길이 일반화(Length Generalization)`를 가능하게 한다는 것을 보여준다고 합니다.
 
-#### **Tasks**
+> 길이 일반화(Length Generalization)란?
+> : ???
+{: .prompt-info}
+
+#### **Tasks란?**
+아래와 같은 두 개의 `Toy Task`를 수행했다고 합니다.
+
+> Toy Task
+> : 복잡한 실제 문제를 단순화하여 특정 능력만 평가하기 위해 만든 작은 규모의 실험 과제. 즉, 연구 목적을 위해 의도적으로 단순하게 만든 실험용 과제라고 합니다.
+{: .prompt-info}
+
+- Last Letter Concatenation
+: 이 `과제(Task)`에서는 모델에게 이름을 구성하는 각 단어의 마지막 글자를 이어 붙이도록 요구했다고 합니다. 이 과제는 `LM`이 `CoT` 없이도 수행할 수 있는 `첫 글자 이어 붙이기(First Letter Concatenation)`보다 더 어려운 버전이라고 합니다. 예시는 아래와 같습니다.
+: ---
+: **"Amy Brown" 단어에 대한 First Letter Concatenation, Last Letter Concatenation  예시**
+: ---
+: - **First Letter Concatenation**: "**A**my **B**rown" → "**AB**"
+: - **Last Letter Concatenation**: "Am**y** Brow**n**" → "**yn**"
+: ---
+: [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 실험을 위해 [`Name Census`](https://namecensus.com/) 데이터에서 상위 1,000개의 `이름(First Names)`과 `성(Last Names)`을 무작위로 이어 붙여 `전체 이름(Full Names)`을 생성했다고 합니다.
+
+- Coin Flip
+: 이 과제에서는 모델에게 사람들이 동전을 뒤집거나 뒤집지 않았을 때, 아직 동전이 계속 앞면을 향하고 있는지를 답하도록 요구했다고 합니다. 예시는 아래와 같습니다.
+: ---
+: **Coin Flip 예시**
+: ---
+: **Q:**
+: “A coin is heads up. Phoebe flips the coin. Osvaldo does not flip the coin. Is the coin still heads up?”
+: **Q(번역):**
+: 동전이 앞면을 향하고 있다. Phoebe가 동전을 뒤집었다. Osvaldo는 동전을 뒤집지 않았다. 동전은 여전히 앞면을 향하고 있는가?
+: <br>
+: **A:**
+: “No”.
+: **A(번역):**
+: 아니요.
+: ---
+
+이러한 형식적 추론(Symbolic Reasoning) 과제는 구성 방식이 명확하게 정의되어 있기 때문에, 각 과제에 대해 두 가지 유형의 테스트 세트를 고려하였다.
+
+첫 번째는 학습 데이터(training) 또는 Few-shot 예시(exemplars)와 동일한 단계 수를 갖는 예시들로 구성된 동일 분포(in-domain) 테스트 세트이다.
+
+두 번째는 평가 예시가 Few-shot 예시보다 더 많은 단계를 포함하는 분포 외(out-of-domain, OOD) 테스트 세트이다.
+
+Last Letter Concatenation 과제에서는 모델이 두 단어로 이루어진 이름만을 Few-shot 예시로 본 뒤, 3개 또는 4개의 단어로 이루어진 이름에 대해 마지막 글자 이어 붙이기를 수행하도록 하였다.⁴
+
+Coin Flip 과제에서도 **동전을 뒤집을 수 있는 횟수(number of potential flips)**에 대해 동일한 방식을 적용하였다.
+
+실험 설정(experimental setup)은 앞의 두 절에서 사용한 것과 동일한 방법 및 모델을 사용하였다.
+
+또한 각 과제에 대해 Few-shot 예시를 위한 Chain of Thought를 수작업으로 작성하였으며, 이는 Figure 3에 제시되어 있다.
 
 #### **결과**
