@@ -406,7 +406,7 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 	---
 
 - **Prompts**
-: 앞선 [**"Arithmetic Reasoning 측정"**](#arithmetic-reasoning-측정)과 동일한 실험 환경을 따랐다고 합니다. `CSQA`와 `StrategyQA`의 경우에는 학습 데이터셋에서 예시들을 무작위로 선택한 뒤, 이를 `Few-shot` 예시로 사용하기 위해 `CoT`를 수작업으로 작성했다고 합니다. 두 개의 `BIG-bench` 데이터셋은 학습 데이터셋이 존재하지 않기 때문에, 평가 데이터셋의 처음 10개의 예시를 `Few-shot` 예시로 선택했고 나머지 평가 데이터셋으로 성능 결과를 측정했다고 합니다. 마지막으로 `SayCan`의 경우에는 [`"Do As I Can, Not As I Say: Grounding Language in Robotic Affordances(Arxiv, 2022)"`](https://arxiv.org/abs/2204.01691)에서 사용한 학습 데이터셋의 6개 예시를 사용하였으며, 이들에 대해서도 `CoT`를 수작업으로 작성했다고 합니다.
+: 앞선 [Arithmetic Reasoning 측정](#arithmetic-reasoning-측정)과 동일한 실험 환경을 따랐다고 합니다. `CSQA`와 `StrategyQA`의 경우에는 학습 데이터셋에서 예시들을 무작위로 선택한 뒤, 이를 `Few-shot` 예시로 사용하기 위해 `CoT`를 수작업으로 작성했다고 합니다. 두 개의 `BIG-bench` 데이터셋은 학습 데이터셋이 존재하지 않기 때문에, 평가 데이터셋의 처음 10개의 예시를 `Few-shot` 예시로 선택했고 나머지 평가 데이터셋으로 성능 결과를 측정했다고 합니다. 마지막으로 `SayCan`의 경우에는 해당 데이터셋의 논문인 [`"Do As I Can, Not As I Say: Grounding Language in Robotic Affordances(Arxiv, 2022)"`](https://arxiv.org/abs/2204.01691)에서 언급된 학습 데이터셋의 6개 예시를 사용하였으며, 이들에 대해서도 `CoT`를 수작업으로 작성했다고 합니다.
 
 	---
 	**SayCan 예시들**
@@ -437,10 +437,39 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 [이 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서 마지막으로 다루는 실험은 `Symbolic Reasoning(형식적 추론)`입니다. `Symbolic Reasoning`은 사람에게는 쉽지만, 언어 모델에게는 잠재적으로 어려운 과제일 수도 있다고 합니다. [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 `CoT Prompting`이 `Standard Prompting`으로는 수행하기 어려운 `Symbolic Reasoning` 과제를 `LM`이 수행할 수 있도록 할 뿐만 아니라, `Few-shot` 예시에서 보지 못했던 것보다 더 긴 `추론 시점(Inference-time)`의 입력에 대해서도 `길이 일반화(Length Generalization)`를 가능하게 한다는 것을 보여준다고 합니다.
 
 > 길이 일반화(Length Generalization)란?
-> : ???
+> : `길이 일반화(Length Generalization)`는 보다 긴 입력이나 더 많은 추론 단계를 요구하는 문제에도 잘 작동하는 것입니다. 길이 일반화를 실험해보기에 `Symbolic Reasoning`이 가장 적합하다고 합니다. 그 이유는 `Symbolic Reasoning`에서 추론 단계 수만 조절하여, **추론 단계 수에 대해서만** 성능 평가가 가능하기 때문이라고 합니다. `Symbolic Reasoning`이 왜 길이 일반화 실험에 적합한지 `Arithmetic Reasoning`와 비교해서 아래의 예시로 살펴보겠습니다.
+> : ---
+> : **Arithmetic Reasoning 실험이 길이 일반화에 적합하지 않은 이유에 대한 예시**
+> : ---
+> : **2 단계 Arithmetic Reasoning을 요구하는 Q:**
+> : 사과가 3개 있다. 2개를 더 샀다. 1개를 먹었다. 몇 개인가?
+> : **추론 단계:**
+> : 정의(사과 3개)-> 1번 추론(3 + 2 = 5) -> 2번 추론(5 - 1 = 4) -> 정답: 4개<br><br>
+> : **8 단계 Arithmetic Reasoning을 요구하는 Q:**
+> : 사과가 3개 있다. 2개를 더 샀다. 1개를 먹었다. 친구가 4개를 주었다. 2개를 팔았다. 3개를 샀다. 5개를 버렸다. 3개를 또 샀다. 1개를 잃어버렸다. 몇 개인가?
+> : **추론 단계:**
+> : 정의(사과 3개)-> 1번 추론(3 + 2 = 5) -> 2번 추론(5 - 1 = 4) ... -> 8번 추론(7 - 1 = 6) -> 정답: 6개
+> : ---
+> : 위의 예시에서 볼 수 있듯이 `Arithmetic Reasoning`에서는 각 추론마다 숫자도 달라지고 사용하는 연산이 달라지기 때문에 변수가 많습니다. 그래서 오직 추론 단계 수에 대해서만 성능 평가를 하기에는 적절치는 않습니다.
+> : 그럼 이번에는 `Symbolic Reasoning` 예시를 살펴보겠습니다.
+> : ---
+> : **Symbolic Reasoning([Coin Flip](#tasks란)) 예시**
+> : `Coin Flip`은 모델에게 사람들이 동전을 뒤집거나 뒤집지 않았을 때, 아직 동전이 계속 앞면을 향하고 있는지를 답하도록 요구하는 과제라고 생각하시면 되겠습니다.
+> : ---
+> : **2 단계 Symbolic Reasoning을 요구하는 Q:**
+> : A coin is heads up. Alice flips the coin. Bob does not flip the coin. Is the coin still heads up?
+> : **추론 단계:**
+> : Coin의 상태(Heads) -> 1번 추론(Tails) -> 2번 추론(Tails) -> 정답: No<br><br>
+> : **8 단계 Symbolic Reasoning을 요구하는 Q:**
+> : A coin is heads up. Alice flips the coin. Bob does not flip the coin. Charlie flips the coin. David flips the coin. Emma does not flip the coin. Frank flips the coin. Grace does not flip the coin. Henry flips the coin. Is the coin still heads up?
+> : **추론 단계:**
+> : Coin의 상태(Heads) -> 1번 추론(Tails) -> 2번 추론(Tails) ... -> 8번 추론(Tails) -> 정답: No
+> : ---
+> : 이 예시를 보면 알 수 있듯이 `Symbolic Reasoning`의 `Coin Flip` 과제는 단순하게 `Coin`의 상태가 `Heads` 상태인지, `Tails` 상태인지만 기억하면 되고, 일정한 규칙이 있기 때문에 추론 단계 수만 조절하여, **추론 단계 수에 대해서만** 성능 평가가 가능합니다.
 {: .prompt-info}
 
-#### **Tasks란?**
+
+#### **Tasks**
 아래와 같은 두 개의 `Toy Task`를 수행했다고 합니다.
 
 > Toy Task
@@ -473,18 +502,18 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 : 아니요.
 : ---
 
-이러한 형식적 추론(Symbolic Reasoning) 과제는 구성 방식이 명확하게 정의되어 있기 때문에, 각 과제에 대해 두 가지 유형의 테스트 세트를 고려하였다.
+이러한 `Symbolic Reasoning` 과제는 규칙이 명확하게 정의되어 있기 때문에, 각 과제에 대해 아래와 같은 두 가지 유형의 테스트 세트를 고려했다고 합니다.
 
-첫 번째는 학습 데이터(training) 또는 Few-shot 예시(exemplars)와 동일한 단계 수를 갖는 예시들로 구성된 동일 분포(in-domain) 테스트 세트이다.
+1. 학습 데이터 또는 `Few-shot` 예시와 동일한 단계 수를 갖는 예시들로 구성된 `동일 분포(In-domain)` 테스트 세트
+2. 평가 예시가 `Few-shot` 예시보다 더 많은 단계를 포함하는 `분포 외(Out-Of-Domain, OOD)` 테스트 세트
 
-두 번째는 평가 예시가 Few-shot 예시보다 더 많은 단계를 포함하는 분포 외(out-of-domain, OOD) 테스트 세트이다.
+`Last Letter Concatenation` 과제에서는 모델이 두 단어로 이루어진 이름만을 `Few-shot` 예시로 본 뒤, 3개 또는 4개의 단어로 이루어진 이름에 대해 마지막 글자 이어 붙이기를 수행하도록 했다고 합니다. `Coin Flip` 과제에서도 동전을 뒤집을 수 있는 횟수에 대해 동일한 방식을 적용했다고 합니다. 앞서 설명했던 `길이 일반화(Length Generalization)`를 확인하기 위해서 이렇게 `Few-shot` 예시보다 더 많은 추론 단계를 요구하는 질문을 테스트로 사용한 것 같습니다.
 
-Last Letter Concatenation 과제에서는 모델이 두 단어로 이루어진 이름만을 Few-shot 예시로 본 뒤, 3개 또는 4개의 단어로 이루어진 이름에 대해 마지막 글자 이어 붙이기를 수행하도록 하였다.⁴
+#### **실험 환경**
 
-Coin Flip 과제에서도 **동전을 뒤집을 수 있는 횟수(number of potential flips)**에 대해 동일한 방식을 적용하였다.
+실험 환경은 앞의 [`Arithmetic Reasoning 측정`](#arithmetic-reasoning-측정), [`Commonsense Reasoning 측정`](#commonsense-reasoning-측정)에서의 실험환경과 동일한 방법 및 모델을 사용했다고 합니다. 또한 각 과제에 대해 `Few-shot` 예시를 위한 `CoT`를 수작업으로 작성하였으며, 이는 아래의 `Figure 3`와 같이 작성했다고 합니다.
 
-실험 설정(experimental setup)은 앞의 두 절에서 사용한 것과 동일한 방법 및 모델을 사용하였다.
-
-또한 각 과제에 대해 Few-shot 예시를 위한 Chain of Thought를 수작업으로 작성하였으며, 이는 Figure 3에 제시되어 있다.
+![13]({{ page.img_path }}/13.png){: .shadow}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 3` 중 `Symbolic Reasoning` 예시_
 
 #### **결과**
