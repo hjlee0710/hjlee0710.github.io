@@ -453,7 +453,7 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 > : 위의 예시에서 볼 수 있듯이 `Arithmetic Reasoning`에서는 각 추론마다 숫자도 달라지고 사용하는 연산이 달라지기 때문에 변수가 많습니다. 그래서 오직 추론 단계 수에 대해서만 성능 평가를 하기에는 적절치는 않습니다.
 > : 그럼 이번에는 `Symbolic Reasoning` 예시를 살펴보겠습니다.
 > : ---
-> : **Symbolic Reasoning([Coin Flip](#tasks란)) 예시**
+> : **Symbolic Reasoning([Coin Flip](#tasks)) 예시**
 > : `Coin Flip`은 모델에게 사람들이 동전을 뒤집거나 뒤집지 않았을 때, 아직 동전이 계속 앞면을 향하고 있는지를 답하도록 요구하는 과제라고 생각하시면 되겠습니다.
 > : ---
 > : **2 단계 Symbolic Reasoning을 요구하는 Q:**
