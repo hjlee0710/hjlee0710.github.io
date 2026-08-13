@@ -140,14 +140,11 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}{% endraw %}
 > 만약에, 벌써 `메타태그`가 기록되어 있는 소스코드를 업로드 하셨다면 [[Git] BFG로 Commit log 삭제](../git-bfg-1)를 참고하여 `Commit log`를 삭제해주세요.
 {: .prompt-info }
 
-1. 먼저, [`Google Search Console`](https://search.google.com/search-console/welcome?utm_source=about-page)에 들어가서 아래의 사진처럼 `URL 접두어`에 블로그 도메인을 입력해줍니다.
-![1]({{ page.img_path }}/1.png){: .shadow .rounded-10}
+1. 먼저, [`Google Search Console`](https://search.google.com/search-console/welcome?utm_source=about-page)에 들어가서 아래의 사진처럼 `URL 접두어`에 블로그 도메인을 입력해줍니다.<br>![1]({{ page.img_path }}/1.png){: .shadow .rounded-10}
 
-2. 이후 아래의 창이 뜨면, `속성으로 이동`을 클릭합니다.
-![2]({{ page.img_path }}/2.png){: width="400"   .shadow .rounded-10}
+2. 이후 아래의 창이 뜨면, `속성으로 이동`을 클릭합니다.<br>![2]({{ page.img_path }}/2.png){: width="400"   .shadow .rounded-10}
 
-3. `권장 확인 방법`에 표시한대로 `HTML` 파일을 `root`에 다운로드 시켜도 되지만, 저는 `HTML 태그`를 사용해서 소유권 확인을 해보도록 하겠습니다. 아래의 그림대로 `메타태그`를 복사합니다.
-![3]({{ page.img_path }}/3.png){: width="400" .shadow .rounded-10}
+3. `권장 확인 방법`에 표시한대로 `HTML` 파일을 `root`에 다운로드 시켜도 되지만, 저는 `HTML 태그`를 사용해서 소유권 확인을 해보도록 하겠습니다. 아래의 그림대로 `메타태그`를 복사합니다.<br>![3]({{ page.img_path }}/3.png){: width="400" .shadow .rounded-10}
 
 4. ~~복사한 `메타태그`를 `_config.yml`에 입력해야 합니다. 하지만, `메타태그`를 그대로 `_config.yml`에 입력하면 추후 `GitHub`에 업로드하면서 `메타태그`가 노출됩니다. 이를 방지하기 위해서 `GitHub Actions`의 `Repository Variables`를 등록해주도록 하겠습니다.<br>
 아래의 그림의 순서대로 **Settings>Secrets and variables>Actions>Variables>New repository variable**를 클릭합니다.~~

@@ -79,8 +79,7 @@ bundle
 ```bash
 bundle exec jekyll serve
 ```
-아래 그림의 붉은 박스로 표시한 주소(`http://127.0.0.1:4000/`)를 주소창에 입력하여 `Local` 환경에서 블로그가 제대로 생성되었는지 확인할 수 있습니다.
-![3]({{ page.img_path }}/3.png){: .shadow .rounded-10}
+아래 그림의 붉은 박스로 표시한 주소(`http://127.0.0.1:4000/`)를 주소창에 입력하여 `Local` 환경에서 블로그가 제대로 생성되었는지 확인할 수 있습니다.<br>![3]({{ page.img_path }}/3.png){: .shadow .rounded-10}
 
 > `livereload`옵션을 사용하시면 `Local` 환경에서 수정하는대로 바로 반영할 수 있습니다. 하지만 `_config.yml`은 수정해도 바로 반영되지 않습니다.
 > ```bash
