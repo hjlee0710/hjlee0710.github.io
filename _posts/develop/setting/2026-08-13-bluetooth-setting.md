@@ -5,7 +5,7 @@ categories:
 - setting
 img_path: "/assets/img/posts/develop/setting/2026-08-13-bluetooth-setting"
 image:
-  path: "/assets/img/posts/develop/setting/2026-08-13-bluetooth-setting/1.png"
+  path: "/assets/img/posts/develop/setting/2026-08-13-bluetooth-setting/communication3.png"
 ---
 
 ## **배경**
