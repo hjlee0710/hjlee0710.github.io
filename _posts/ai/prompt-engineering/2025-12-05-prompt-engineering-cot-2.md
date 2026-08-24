@@ -1,0 +1,270 @@
+---
+title: "[Prompt Engineering] CoT 논문 리뷰 - ② 실험(Arithmetic Reasoning)"
+categories:
+- AI
+- Prompt Enginnering
+img_path: "/assets/img/posts/ai/prompt-engineering/2025-12-05-prompt-engineering-CoF-2"
+image:
+  path: "/assets/img/posts/ai/prompt-engineering/2025-12-05-prompt-engineering-CoF-2/1.png"
+---
+## **실험**
+[**"[Prompt Engineering] CoT 논문 리뷰 - ① 서론"**](../prompt-engineering-cot-1/#arithmetic-reasoning수리-추론)에서 설명드렸듯이 `CoT`는 `Arithmetic(수리)`, `Commonsense(상식적)`, `Symbolic(논리)` 추론 성능을 향상시키는 `Prompt` 기술입니다. 그래서 해당 논문에서는 아래와 같은 3가지의 추론 성능을 기준으로 실험했습니다.
+
+- `Arithmetic Reasoning` 측정
+- `Commonsense Reasoning` 측정
+- `Symbolic Reasoning` 측정
+
+이번 포스트에서는 `Arithmetic Reasoning`만 살펴보도록 하겠습니다.
+
+## **Arithmetic Reasoning 측정**
+ `Arithmetic Reasoning`는 `LLM`에게는 꽤 어려운 과제입니다. 하지만 이 실험에서는 `540B 파라미터`를 가진 `LLM`에 `CoT Prompting`을 적용시킴으로서, 특정 작업에 맞춰서 파인 튜닝한 모델과 비슷한 성능을 보인다고 합니다. 특히, 난이도가 있는 `GSM8K` 벤치마크에서 `SOTA`를 달성했다고 합니다.
+### **실험 환경**
+- **벤치 마크**
+: `GSM8K`, `SVAMP`, `ASDiv`, `AQuA`, `MAWPS` 데이터셋을 사용했습니다. 만약에, 각 데이터셋에 대한 예시가 궁금하시면 [`본 논문`](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 12`를 살펴보시기 바랍니다.
+
+	- GSM8K
+	: 전통적인 수학 문장 문제로 아래의 예시처럼 질문이 주어집니다.
+
+	- SVAMP
+	: 문제 구조가 다양한 수학 문장 문제입니다.
+	
+	- ASDiv
+	: 문제 유형이 다양한 수학 문장 문제입니다.
+
+	- AQuA
+	: 대수 기반의 문장 문제이며, 객관식으로 주어집니다.
+		
+	- MAWPS(SingleOp, SingleEq, AddSub, MultiArith)
+	: 다양한 출처에서 수집된 수학 문제입니다.
+	
+	---
+	**벤치 마크 GSM8K 예시**
+
+	---
+
+	Q:
+	: Josh decides to try flipping a house. He buys a house for $80,000 and then puts
+	in $50,000 in repairs. This increased the value of the house by 150%. How
+	much profit did he make?
+
+	번역:
+	: Josh는 주택 재테크를 시도해 보기로 결심합니다. 그는 집을 $80,000에 구입한 후, $50,000을 들여 수리를 합니다. 이로 인해 집의 가치는 150% 증가합니다. Josh는 얼마의 이익을 얻게 되었을까요?
+
+	---
+	
+- **표준 Prompting**
+: `Baseline`으로 [`"Language models are few-shot learners"(NeurIPS, 2020년)`](https://papers.nips.cc/paper_files/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html) 논문의 `Few-Shot Prompting` 방식을 사용한다고 합니다. `Few-Shot Prompting` 방식은 `입력-출력 쌍 형태의 예시`를 먼저 제시를 합니다. 이후, `테스트용 예시`를 입력하여 모델에게는 `모델의 직접적인 답변` 출력만을 요구합니다. 모든 예시들은 전부 질문과 답변들로만 이루어져 있습니다. 아래의 그림을 보면 조금더 이해가 쉬울 것입니다.
+
+	![2]({{ page.img_path }}/2.png){: .shadow .rounded-10}
+
+- **CoT Prompting**
+: `CoT Prompting`에서 가장 중요한 것은 사고 과정(`CoT`)을 포함시키는 것입니다. 기존 벤치마크는`CoT`가 없고 오직 질문과 답만 있기 때문에, 해당 논문에서는 총 8개의 `Few-Shot 예시`에 맞는  `CoT`를 수작업으로 구성했습니다. 아래의 그림과 같은 8개의 동일한 `CoT` 예시 집합을 `AQuA`를 제외한 모든 벤치마크에서 사용했다고 합니다.
+	
+	![3]({{ page.img_path }}/3.png){: .shadow .rounded-10}
+	_`Few-Shot` 예시를 표현한 `Table 20`_
+	
+> `AQuA` 벤치마크는 [앞서 말씀드렸듯이](#실험-환경) 객관식으로 구성되어 있기 때문에, 위의 `CoT` 예시 집합은 `AQuA` 벤치마크에서 사용하지 못합니다. 대신에, `AQuA` 벤치마크에서는 해당 벤치마크에서 4개의 `Few-Shot 예시`를 뽑아내고 이에 맞는 `CoT`를 직접 작성해줬다고 합니다. 해당 예시는 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 21`를 읽어보시면 되겠습니다.
+{: .prompt-info}
+
+- **LLM**
+: 총 5 종류의 `LLM`을 사용하여 실험했다고 합니다. `GPT-3`, `LaMDA`(422M, 2B, 8B, 68B, 137B), `PaLM`(8B, 62B, 540B), `UL2 20B`, `Codex`(code-davinci-002)을 사용했다고 합니다.
+
+	- GPT-3의 사용모델
+	: `GPT-3`을 기반으로 사람의 명령을 더 잘 이해하도록 만든 모델인 `InstructGPT`를 사용했습니다. 해당 모델을 기반으로 파라미터 크기가 다른 총 4개의 모델,`text-ada-001`(약 350M)`text-babbage-001`(약 1.3B), `text-curie-001`(약 6.7B), `text-davinci-002`(약 175B)을 사용했다고 합니다.
+
+- **LM 생성 방식 및 실험 설정**
+	- 모든 `LLM`모델은 `Greedy Decoding`으로 샘플링했다고 합니다.<br>(참고로 [`"Self-consistency improves chain of thought reasoning in language models."`](https://arxiv.org/pdf/2203.11171) 논문에서는 여러 번 생성해서 가장 많이 나온 답을 선택하면 성능이 향상된다고 합니다.)
+	- `LaMDA` 모델과 같은 경우는 5개의 랜덤 시드로 예시 순서를 섞어서 평균 결과를 확인했다고 합니다. 하지만, 시드 간의 차이가 크지 않았기 때문에, 다른 모델들은 단일 예시 순서만으로 실험 결과를 확인했다고 합니다. 
+	> **즉, 앞서 수작업으로 작성했었던 `CoT`를 추가한 `Few-Shot 예시` 8개를 순서를 바꿔가면서 학습을 시켜봤지만 성능차이가 없었다고 이해하시면 됩니다.**
+
+	> **`Greedy Decoding`으로 샘플링 했다고 했는데, `Greedy Decoding`이 뭘까요?**
+	> <br>일단 이러한 전략이 왜 필요한지 이해하면 좋을 것 같습니다. `LLM`이 매 순간 어떤 단어를 고를지 결정할 필요가 있는데, 이때 어떤 전략을 선택하는가에 따라서 문장이 달라진다고 합니다. 그 중 `Greedy Decoding`은 `가장 높은 확률을 가진 단어를 매 단계에서 하나씩 선택하는 방식`이라고 합니다. 
+	> <br><br> 예를 들어, 다음 단어 후보가 `apple`(0.4), `banana`(0.25), `orange`(0.22), `table`(0.13)이라고 했을 때, 확률이 가장 높은 `apple`이 다음 단어로 선택됩니다. 
+	> <br>
+	>> **즉, `Greedy Decoding` 방식은 단순하고 빠르지만, 항상 높은 확률의 단어만 선택하기 때문에 창의성이나 다양성이 떨어질 수 있다는 단점이 있다고 합니다.**
+	>
+	>그래서 `Beam Search`, `Random Sampling` 등의 다양한 전략들도 적재적소로 사용됩니다.
+	{: .prompt-info}
+
+### **실험 결과**
+실험 결과를 요약하면 아래의 `Figure 4`와 같습니다. 이 실험으로 도출된 세가지 핵심 요점이 있다고 합니다. 자세한 실험 결과를 확인하고 싶으시다면 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 2`를 읽어보세요.
+
+![4]({{ page.img_path }}/4.png){: .shadow .w-50 .rounded-10}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 4`_
+
+![5]({{ page.img_path }}/5.png){: .shadow .rounded-10}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 2`_
+
+1. **CoT Prompting은 LLM에서 모델 Scale에 따라 `Emergent Ability`가 보입니다.**
+	- 위의 `Figure 4`를 보면 알 수 있듯이 `100B`보다 큰 규모의 모델에서는 `Emergent Ability`가 보입니다.
+	- 소형 모델들은 문법적으로는 유창하지만, 논리적으로 맞지 않는 `CoT`를 생성해 오히려 `Standard Prompting`보다 성능이 더 낮은 경우도 있다고 합니다.
+
+	> `Emergent Ability`란?
+	> : 모델의 규모가 일정 수준을 넘었을 때, 이전에는 보이지 않던 새로운 능력이 갑자기 나타나는 현상입니다. 위의 `Figure 4`에서 `GPT`를 `GSM8K` 데이터셋으로 실험한 결과를 살펴봤을때, 규모(`scale`)가 7B일 때는 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 크게 나지 않습니다. 하지만 178B에서 `Standard prompting`과 `Chain-of-thought prompting` 간의 `solve rate` 값 차이가 확실하게 나오면서 `Emergent Ability`가 발생했다고 볼 수 있습니다. [`"Emergent Abilities of Large Language Models"`](https://arxiv.org/abs/2206.07682) 논문을 참고해주세요.
+	{: .prompt-info}
+
+2. **문제 난이도가 높을수록 CoT의 성능 향상이 더 큽니다.**
+	> `데이테셋의 문제 난이도`란?
+	> : 문제 난이도는 위의 `Figure 4`의 `Standard prompting` 실험 결과로 판단합니다. `GSM8K` 데이터셋은 모델의 규모가 커져도 `solve rate`가 `20%`로 넘기지 못하며 크게 향상되지 않습니다. 반면에 `MAWPS` 데이터셋은 규모가 `100B`를 넘겼을때, `solve rate`가 크게 향상됩니다. 그래서 `GSM8K`은 비교적 문제의 난이도가 높다고 하고 `MAWPS`는 비교적 문제의 난이도가 낮다고 합니다.
+	{: .prompt-info}
+
+	- 위의 `Figure 4`를 살펴보면, `GSM8K` 데이터셋과 같이 난이도가 높은 문제에서는 `GPT` 및 `PaLM`과 같은 대형 모델에서 `CoT prompting`이 모델의 성능을 2배 이상 향상시킵니다.
+	- 반면, `MAWPS`처럼 단계가 한 번이면 풀리는 난이도가 낮은 문제에서는 성능 향상이 없거나 오히려 떨어지기도 한다고 합니다.
+	<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 3`를 참고하시면 더 잘 이해할 수 있을 것입니다.)
+
+3. **GPT-3 175B 및 PaLM 540B는 기존 `SOTA`와 비교해도 뛰어납니다.**
+	- `CoT prompting`을 적용한 `PaLM 540B`는 `GSM8K`, `SVAMP`, `MAWPS`에서 새로운 최고 성능을 달성했습니다.
+	<br>(`GPT-3 175B`는 `SVAMP` 데이터셋으로 실험한 결과가 `SOTA`와 크게 다르지 않아서 `PaLM 540B`를 중정점으로 다룬 것 같습니다.)
+	- 단, `SVAMP`의 경우는 `Standard prompting`만으로도 기존 최고 성능을 이미 넘겼습니다.
+	- `GSM8K`, `SVAMP`, `MAWPS` 외의 나머지 두 데이터셋 (`AQuA`, `ASDiv`)에서는 `CoT prompting`를 적용한 `PaLM`의 성능이 `Standard prompting` 실험 값의 2% 이내로 근접함으로 큰 성능 향상은 보이지 않았습니다.
+
+위의 세가지의 핵심 요점 뿐만 아니라, **`CoT 추론이 왜 효과적인지?`**, **`모델 Scaling이 왜 CoT의 능력을 개선시키는지?`**에 대한 이유도 분석했다고 합니다.
+
+CoT 추론이 왜 효과적인지?
+: 이를 확인하기 위해서 `LaMDA 137B`가 생성한 `CoT`를 수작업으로 분석했다고 합니다.
+- `GSM8K` 데이터셋에서 정답을 맞힌 50개의 랜덤 샘플 중, 48개는 논리적·수학적으로도 올바른 `CoT`를 생성했다고 합니다. 하지만 나머지 2개는 우연히 정답을 맞힌 경우였다고 합니다.
+<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix D.1`과 `Appendix Table 8`를 참고해주시면 되겠습니다.)
+
+- `GSM8K` 데이터셋에서 정답을 틀린 50개의 랜덤 샘플 중, 46%는 거의 맞았지만 사소한 실수(계산 실수, 기호 해석 오류, 한 단계 누락 등)가 있었다고 합니다. 나머지 54%는 주요한 의미 이해 실패나 논리 불일치 오류를 포함하고 있었다고 합니다.
+<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix D.2`를 참고해주시면 되겠습니다.)
+
+모델 Scaling이 왜 CoT의 능력을 개선시키는지?
+: `CoT` 능력이 `Scaling`(스케일 증가)와 함께 개선되는 이유를 파악하기 위해, `PaLM 62B`와 `PaLM 540B`가 만든 오류를 비교 분석했다고 합니다.
+- `PaLM 540B`는 `PaLM 62B` 모델에서 나타난 주요 오류 유형(단계 누락, 의미 이해 실패 등)을 상당 부분 해결했다고 합니다.
+<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix A.1`을 참고해주시면 되겠습니다.)
+
+### **Ablation Study**
+`CoT prompting`이 성능을 향상시킨다는 결과가 관찰되면서, 자연스럽게 다음과 같은 의문이 제기됩니다.
+
+> **"이러한 성능 향상이 정말 CoT 자체 때문인가, 아니면 다른 형태의 프롬프팅으로도 동일한 효과를 얻을 수 있는가?"**
+
+이를 검증하기 위해 연구진은 아래의 `Figure 5`에서 제시된 세 가지 `Ablation Study`을 수행했다고 합니다.
+
+![6]({{ page.img_path }}/6.png){: .shadow .w-50 .rounded-10}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 5`_
+
+1. **Equation Only**
+- 실험 이유
+: `CoT prompting`이 효과적이라고 추정되는 이유 중 하나는 
+: > **"LLM이 문제를 해결하기 위해서 수학적 `Equation`을 생성하기 때문이다."**
+: 입니다. 그래서 이를 검증하기 위해서 `Equation Only`를 실험했다고 합니다.
+- 실험 조건
+: 모델이 최종 답변을 내기 전에 수학적 `Equation`만 출력하도록 하는 프롬프트를 실험했다고 합니다.
+- 실험 결과 
+: 위의 `Figure 5`를 보면 알 수 있듯이 `Equation Only` 방식은 `GSM8K` 데이터셋에서는 큰 도움을 주지 못했습니다. 
+: > **이는 `CoT`에서 제공되는 자연어 기반 `Reasoning` 단계를 거치지 않고는 `GSM8K` 데이터셋 질문의 `Sementics(의미들)`를 `Equation`으로 변환하기 어렵다는 것을 시사한다고 합니다.** 
+: 반면, 한두 단계 정도의 단순한 `Reasoning`만 필요한 데이터셋에서는 `Equation Only` 방식이 실제로 성능을 향상시켰다고 합니다. 이러한 데이터에서는 질문으로부터 `Equation`을 비교적 쉽게 도출할 수 있기 때문입니다.
+<br>([본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 6`을 참고해주시면 되겠습니다.)
+
+2. **Variable Compute Only**
+- 실험 이유
+: `CoT prompting`이 효과적이라고 추정되는 이유 중 다른 하나는 
+: > **"어려운 문제에서 모델이 더 많은 계산(중간 단계 토큰 등)을 수행할 수 있기 때문이 아닐까?"**
+: 입니다. 그래서 이를 검증하기 위해서 `Variable Compute Only`를 실험했다고 합니다.
+- 실험 조건
+: `CoT`의 `Reasoning`으로 발생하는 `Variable Computation(변수 계산)`의 효과만 분리하기 위해서, 문제를 해결하는 데 필요한 수식 길이만큼 마침표(.)만 출력하도록 설정했습니다.
+- 실험 결과
+: 이 방식은 기본 `Baseline(Standard Prompting)`과 거의 동일한 성능을 보였다고 합니다. 이 실험이 의미하는 것은 `Variable Computation`으로는 `CoT`의 성능 향상을 설명할 수 없다는 뜻입니다. 즉, 자연어로 중간 사고 과정를 표현하면서 성능 향상이 발생한다는 것을 의미합니다.
+- 예시
+: 이 실험에 대해서 조금 더 이해하기 위해서 아래와 같은 예시를 따로 준비해봤습니다. 먼저, `Baseline`인 `Standard Prompting`의 방식에 대해서 예시를 들도록 하겠습니다.
+: ---
+: **Standard Prompting 실험 예시**
+: ---
+: **Model Input**
+: **Q:**
+: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?
+: **Model Output**
+: **A:**
+: The answer is 9.
+: ---
+: `Standard Prompting 실험 예시`는 명확합니다. 이 `Standard Prompting` 방식은 `CoT`를 사용하지 않아서 `Variable Computation`의 기준이 된다고 생각하시면 되겠습니다. 그럼 `CoT`의 `Variable Computation`만 늘려주려면 어떻게 해야할까요? 아래의 예시로 설명하겠습니다.
+: ---
+: **Variable Compute Only 실험 예시**
+: ---
+: **Model Input**
+: **Q:**
+: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?
+: **A:**
+: Roger started with 5 balls. 2 cans of 3 tennis balls each is 6 tennis balls. 5 + 6 = 11. The answer is 11.
+: **Q:**
+: The cafeteria had 23 apples. If they used 20 to make lunch and bought 6 more, how many apples do they have?
+: **Model Output**
+: **A:**
+: ............................................................................................................................. The answer is 9.
+: ---
+: `Variable Compute Only 실험 예시`에서 `Model Input`은 `CoT` 방식으로 작성이 되었습니다. 하지만 `Model Output`에서 특별한 `Prompting` 설정이 있습니다. 원래 정상적인 `CoT`라면 대답이 아래와 같이 작성이 되었어야 합니다.
+: ---
+: **Model Output**
+: **A:**
+: The cafeteria had 23 apples originally. They used 20 to make lunch. So they had 23 - 20 = 3. They bought 6 more apples, so they have 3 + 6 = 9. The answer is 9.
+: ---
+: 즉, 특별한 `Prompting` 설정은 `The answer is 9.`이라는 정답 앞의 내용들을 정상적인 `CoT`의 답변의 길이만큼 전부 마침표로 출력하도록 한 것입니다.
+: 이런 특별한 `Prompting` 설정을 통해서 자연어로 구성된 중간 사고 과정을 제거하고 오직 `Variable Computation`만 늘려줬다고 볼 수 있습니다.
+: 결론적으로 본 논문에서는 이러한 특별한 `Prompting` 설정을 한 `Variable Compute Only`와 `Standard Prompting`를 비교했을 때, 큰 성능 차이가 없었다는 점을 입증했다고 합니다.
+
+3. **Chain of Thought After Answer**
+- 실험 이유
+: `CoT prompting`이 효과적이라고 추정되는 이유 중 마지막 하나는 
+: > **"CoT 프롬프트가 모델이 사전학습(pretraining) 과정에서 습득한 관련 지식을 더 잘 불러오도록 도와주는 것일 뿐 아닐까?"**
+: 입니다.
+- 실험 조건
+: 모델이 먼저 정답을 출력한 뒤, 그 다음에 `CoT` 형태의 추론을 생성하도록 프롬프트를 구성했다고 합니다. 이를 통해 최종 정답을 도출할 때, 생성된 `CoT`에 실제로 의지하는지 여부를 확인했다고 합니다.
+- 실험 결과
+: 이 방식도 기본 `Baseline(Standard Prompting)`과 거의 동일한 성능을 보였다고 합니다. 이 실험이 의미하는 것은 `CoT` 안에 포함된 순차적 추론 과정이 단순히 지식을 활성화 하는 것 이상의 이유에서 유용하다는 것을 시사합니다.
+
+### **Robustness of Chain of Thought**
+`Prompting` 기반 접근법에서 예시에 대한 `민감성(Sensitivity)`은 중요한 고려 사항이라고 합니다. 예를 들어, `Few-Shot` 예시의 순서만 바꾸더라도 `GPT-3`의 `SST-2` 정확도가 거의 무작위 수준인 54.3%부터 `SOTA`에 가까운 93.4%까지 달라질 수 있다는 연구 결과가 있었습니다. 해당 연구결과는 [`"Calibrate before use: Improving few-shot performance of language models"(ICML, 2021)`](https://arxiv.org/abs/2102.09690) 논문을 참고하시면 좋겠습니다.<br><br>
+그래서 이번 항목에서는 서로 다른 `작성자(Annotator)`가 작성한 `CoT`에 대해서도 성능이 얼마나 `견고(Robust)`한지를 평가합니다. 앞서 다뤘던 해당 논문의 실험들은 `Annotator A`가 작성한 `CoT`[(`실험 환경`의 `CoT Prompting`에서 다룬 `Table 20`의 `Few-Shot` 예시들)](#실험-환경)를 사용했다고 합니다. 이에 더해, 이 논문의 공동 저자 두 명(`Annotator B`와 `Annotator C`)이 동일한 `Few-shot` 예시들에 대해 서로 독립적으로 `CoT`를 작성했다고 합니다. [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix H`를 참고해주시면 됩니다. 아래의 그림은 `Annotator`들이 작성한 `CoT`들을 비교한 것입니다.
+
+![7]({{ page.img_path }}/7.png){: .shadow .rounded-10}
+_`Annotator A, B, C`를 비교(`Appendix H`에서 참고)_
+
+그리고 이 논문에서는 `Annotator A, B, C`의 `Few-shot` 예시 뿐만 아니라, 추가적으로 `Annotator A`를 [`"Training verifiers to solve math word problems."(Arxiv, 2021)(= GSM8K 데이터셋)`](https://arxiv.org/abs/2110.14168) 논문의 풀이 스타일을 참고하여 기존보다 더 간결한 `CoT`도 별도로 작성했다고 합니다. 아래의 예시를 참고하시면 될 것 같습니다.
+
+---
+**Annotator A의 기존 및 간결한 CoT 예시**
+
+---
+
+- 기존 CoT 예시
+: There were originally 9 computers. For each of 4 days, 5 more computers were added. So 5 * 4 = 20 computers were added. 9 + 20 is 29.
+- 간결한 CoT 예시
+: 5 * 4 = 20 new computers were added. So there are 9 + 20 = 29 new computers in the server room now.
+
+---
+
+위의 예시에서 볼 수 있듯이 간결한 `CoT`는 자잘한 설명 없이 `5 * 4 = 20`와 `9 + 20 = 29` 같은 수식을 중점적으로 다뤘습니다. 
+
+> [`"Training verifiers to solve math word problems."(Arxiv, 2021)`](https://arxiv.org/abs/2110.14168) 논문의 간결한 CoT 예시 대한 간단한 설명
+> : 해당 논문은 `GSM8K` 데이터셋에 대해서 설명하는 논문입니다. 아래의 그림을 보면 알 수 있듯이 `Solution`에서는 `<<4 * 2 = 8>>`과 같은 계산 주석을 아래와 같이 삽입하여 모델들이 계산기를 사용할 수 있도록 했다고 합니다. 이와 같은 작업을 한 이유는 해당 논문에서 다룬 모델들이 산술 계산에서 오류가 자주 발생했기 때문에 이를 보안하기 위해서 입니다. 이 포스팅에서 다루고 있는 [논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 이러한 수식 위주의 방법을 사용하여, 간결한 `CoT`를 작성했다고 생각하시면 되겠습니다.
+> ![8]({{ page.img_path }}/8.png){: .shadow}
+> _`GSM8K` 데이터셋 예시_
+{: .prompt-info}
+
+이제, `LaMDA 137B`에서 `GSM8K`와 `MAWPS` 데이터셋에 `Annotator A, B, C`가 작성한 `CoT`와 간결한 `CoT` 등을 활용하여 실험한 결과를 살펴보도록 하겠습니다. 실험 결과는 아래의 `Figure 6`와 같습니다. 추가적으로 다른 데이터셋에 대한 `Ablation Study`와 `Robustness` 실험 결과는 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix Table 6, Table 7`에 제시되어 되어 있으니 참고해주세요.
+
+![9]({{ page.img_path }}/9.png){: .shadow .rounded-10}
+_[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Figure 6`_
+
+`Figure 6`를 보면 알 수 있듯이, `예시 기반 프롬프팅(Exemplar-based Prompting)`에서는 서로 다른 `CoT` 작성 방식에 따라 `성능 차이(Variance)`가 있습니다. 하지만 모든 `CoT` 프롬프트는 `Standard Prompting`보다 큰 폭으로 좋은 성능을 보였습니다.<br>
+> **결론적으로 CoT는 특정한 언어적 표현 방식(Linguistic Style)에 의존할 필요가 없이 강건하다는 뜻입니다.**
+
+> `예시 기반 프롬프팅(Exemplar-based Prompting)`는 앞서 다뤘던 `Few-shot Prompting`와 비슷하다고 생각하시면 되겠습니다.
+{: .prompt-info}
+
+또한 `CoT Prompting`이 다른 예시 집합에서도 잘 동작하는지 확인하기 위해 추가 실험도 실행했다고 합니다. `GSM8K` 데이터셋에서 8개의 예시를 무작위로 선택한 세 개의 서로 다른 예시 집합(`· exemplars from GSM8K (α, β, γ)`)을 사용하여 실험했습니다. `GSM8K` 데이터셋은 앞서 다뤘던 `GSM8K 데이터셋 예시` 그림을 보면 알 수 있듯이 `Solution`에서 `CoT`처럼 추론 단계를 포함하고 있습니다. 그래서 따로 `CoT`를 작성하지 않고 `GSM8K` 데이터셋의 예시들을 사용했을 때는 효과가 어떨지를 평가한 것입니다.
+
+> 무작위로 선택한 세 개의 서로 다른 예시 집합 선정 방법
+> : 입력 `컨텍스트 창(Context Window)`에 맞추기 위해 60 토큰 이하의 예시만 샘플링(따로 가공하지 않고 선별)했다고 합니다. 그리고 `Annotator`들이 직접 작성한 8개의 `Few-shot 예시`와 공정하게 비교하기 위해 해결 단계도 2단계 이하인 예시로 제한했다고 합니다. 이런 방식으로 예시를 샘플링한 것을 보면 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)에서는 명시하지 않았지만, `Annotator`들이 작성한 `Few-shot 예시`의 `CoT`는 2단계 이하로 작성했던 것 같습니다.
+{: .prompt-info}
+
+`Figure 6`에서 볼 수 있듯이, `· exemplars from GSM8K (α, β, γ)`의 실험 결과도 Annotator A, B, C`가 작성한 `CoT`와 비슷한 성능을 보였고 모두 Standard Prompting을 크게 능가했습니다.<br><br>
+
+마지막으로 산술 추론에서의 `CoT Prompting`이 다음과 같은 요소들에 대해서도 견고하다는 사실을 확인했다고 합니다.
+- 예시의 순서가 달라지는 경우
+- 사용하는 예시의 개수가 달라지는 경우
+
+이에 대한 자세한 결과는 [본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf)의 `Appendix A.2`를 참고하시면 될 것 같습니다.
+
+## 마치며
+이번 포스트에서는 `CoT` 실험 중 `Arithmetic Reasoning` 측정 부분을 살펴봤습니다. 이 논문을 보면서 느낀 점은 `CoT`의 유용성을 설명하기 위해서 다양한 실험을 진행했기 때문에 설득력이 있는 좋은 논문이라는 점입니다. 예전에 저는 `ICIP` 학술대회 논문을 제출했다가 거절당한 경험이 있는데, 이렇게 다양한 실험으로 설득을 하는 논문을 보니 거절 당할만 했다고 생각합니다. 사설이 길었습니다. 다음 포스트에서는 나머지 실험인 `Commonsense, Symbolic Reasoning` 측정과 결론을 살펴보도록 하겠습니다.
