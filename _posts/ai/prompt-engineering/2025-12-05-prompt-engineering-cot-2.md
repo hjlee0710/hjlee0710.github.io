@@ -210,7 +210,7 @@ _[본 논문](https://proceedings.neurips.cc/paper_files/paper/2022/file/9d56096
 - 실험 조건
 : 모델이 먼저 정답을 출력한 뒤, 그 다음에 `CoT` 형태의 추론을 생성하도록 프롬프트를 구성했다고 합니다. 이를 통해 최종 정답을 도출할 때, 생성된 `CoT`에 실제로 의지하는지 여부를 확인했다고 합니다.
 - 실험 결과
-: 이 방식도 기본 `Baseline(Standard Prompting)`과 거의 동일한 성능을 보였다고 합니다. 이 실험이 의미하는 것은 `CoT` 안에 포함된 순차적 추론 과정이 단순히 지식을 활성화 하는 것 이상의 이유에서 유용하다는 것을 시사합니다.
+: 이 방식도 기본 `Baseline(Standard Prompting)`과 거의 동일한 성능을 보였다고 합니다. 이 실험이 의미하는 것은 `CoT` 안에 포함된 순차적 추론 과정이 단순히 지식을 활성화 하는 것 이상으로 유용하다는 것을 시사합니다.
 
 ### **Robustness of Chain of Thought**
 `Prompting` 기반 접근법에서 예시에 대한 `민감성(Sensitivity)`은 중요한 고려 사항이라고 합니다. 예를 들어, `Few-Shot` 예시의 순서만 바꾸더라도 `GPT-3`의 `SST-2` 정확도가 거의 무작위 수준인 54.3%부터 `SOTA`에 가까운 93.4%까지 달라질 수 있다는 연구 결과가 있었습니다. 해당 연구결과는 [`"Calibrate before use: Improving few-shot performance of language models"(ICML, 2021)`](https://arxiv.org/abs/2102.09690) 논문을 참고하시면 좋겠습니다.<br><br>
