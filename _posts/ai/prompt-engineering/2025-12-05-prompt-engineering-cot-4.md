@@ -78,7 +78,7 @@ image:
 {: .prompt-info}
 
 ### **Prompting 연구**
-당연히 해당 논문은 Prompting 연구와도 밀접하게 관련되어 있습니다.
+당연히 해당 논문은 `Prompting` 연구와도 밀접하게 관련되어 있습니다.
 
 [`"Language Models are Few-Shot Learners"(NeurIPS, 2020)`](https://papers.nips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html) 연구에 의해 `Few-shot Prompting`이 대중화된 이후, 모델의 `Prompting` 능력을 향상시키기 위한 여러 일반적인 접근법이 제시되었다고 합니다. 예를 들어,
 
