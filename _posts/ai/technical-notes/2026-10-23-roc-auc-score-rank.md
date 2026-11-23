@@ -5,7 +5,7 @@ categories:
 - Technical Notes
 img_path: "/assets/img/posts/ai/prompt-engineering/technical-notes/roc-auc-score-rank"
 image:
-  path: "/assets/img/posts/ai/prompt-engineering/technical-notes/roc-auc-score-rank/1.png"
+  path:
 ---
 
 ## **ROC-AUC(Area Under the ROC Curve)란?**
