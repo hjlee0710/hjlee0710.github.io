@@ -3,9 +3,7 @@ title: "[Technical Notes] ROC-AUC의 Score Rank 불변성"
 categories:
 - AI
 - Technical Notes
-img_path: "/assets/img/posts/ai/prompt-engineering/technical-notes/roc-auc-score-rank"
-image:
-  path:
+img_path: "/assets/img/posts/ai/prompt-engineering/technical-notes/2026-10-23-roc-auc-score-rank"
 ---
 
 ## **ROC-AUC(Area Under the ROC Curve)란?**
